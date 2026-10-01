@@ -1,0 +1,20 @@
+/* Mobile first: a small proof point after the meal choices, not another large reviews block. */
+.dining-reviews { padding: 68px 20px; background: #e8dfd0; color: var(--ink); }
+.dining-reviews__inner { max-width: 1180px; margin: 0 auto; }
+.dining-reviews__intro { max-width: 520px; }
+.dining-reviews__intro h2 { margin: 12px 0 0; font: 500 clamp(2.65rem, 11vw, 4rem)/.92 var(--serif); letter-spacing: -.045em; }
+.dining-reviews__intro > p:last-child { margin: 17px 0 0; color: #496259; font-size: .9rem; line-height: 1.65; }
+.dining-reviews__quotes { display: grid; gap: 1px; margin-top: 34px; background: #cfc2ae; border: 1px solid #cfc2ae; }
+.dining-reviews blockquote { min-height: 225px; margin: 0; padding: 27px 24px; background: #f7f4ed; }
+.dining-reviews blockquote > p { margin: 0; font: 500 clamp(1.7rem, 7vw, 2.4rem)/1.05 var(--serif); letter-spacing: -.035em; }
+.dining-reviews footer { display: flex; flex-wrap: wrap; align-items: center; gap: 7px 12px; margin-top: 25px; color: #496259; font: 700 .66rem/1.4 var(--sans); letter-spacing: .08em; text-transform: uppercase; }
+.dining-reviews footer span:nth-child(2) { color: #a27732; letter-spacing: .03em; }
+.dining-reviews footer small { flex-basis: 100%; color: #6a7d76; font: 700 .57rem/1.3 var(--sans); letter-spacing: .12em; }
+
+@media (min-width: 701px) {
+  .dining-reviews { padding: clamp(84px, 8vw, 124px) clamp(42px, 8vw, 130px); }
+  .dining-reviews__inner { display: grid; grid-template-columns: minmax(230px, .72fr) minmax(0, 1.28fr); gap: clamp(40px, 7vw, 112px); align-items: center; }
+  .dining-reviews__quotes { grid-template-columns: repeat(2, 1fr); margin: 0; }
+  .dining-reviews blockquote { min-height: 286px; padding: clamp(28px, 3vw, 42px); }
+  .dining-reviews blockquote > p { font-size: clamp(1.8rem, 2.2vw, 2.55rem); }
+}

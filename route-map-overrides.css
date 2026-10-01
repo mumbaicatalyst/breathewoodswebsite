@@ -1,0 +1,60 @@
+/* Geographic orientation and labels for the information-page route map. */
+.drive-map-svg .drive-coastline {
+  fill: none;
+  stroke: #6f99a0;
+  stroke-opacity: .92;
+  stroke-width: 2.1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.drive-map-svg #drive-route-underlay {
+  fill: none;
+  stroke: #1a5a4a;
+  stroke-opacity: .24;
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.drive-map-svg #drive-sea-label {
+  fill: #648991;
+  font: 500 22px/1 var(--serif);
+  font-style: italic;
+  letter-spacing: .035em;
+}
+
+.drive-map-svg #drive-state-label {
+  fill: #49685e;
+  fill-opacity: .72;
+  font: 500 24px/1 var(--serif);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.drive-highway-label rect {
+  fill: #f6f1e5;
+  stroke: #d2c5a5;
+  stroke-width: .8;
+  vector-effect: non-scaling-stroke;
+}
+
+.drive-highway-label text {
+  fill: #41655b;
+  font: 700 11px/1 var(--sans);
+  letter-spacing: .07em;
+}
+
+/* Atal Setu intentionally shares the exact treatment used for Mumbai. */
+.drive-map-svg #drive-origin-label,
+.drive-map-svg .drive-map-place-label {
+  fill: #143d34;
+  font: 700 11px/1 var(--sans);
+  letter-spacing: .05em;
+  paint-order: stroke;
+  stroke: #ece7d8;
+  stroke-width: 5px;
+  stroke-linejoin: round;
+}

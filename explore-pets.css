@@ -1,0 +1,13 @@
+/* Mobile-first pet explorer moment, deliberately separate from the activity cards. */
+.explore-pet-moment { display: grid; grid-template-columns: 1fr; margin: 10px auto 0; max-width: 1400px; overflow: hidden; background: #143d34; color: #f7f4ed; }
+.explore-pet-moment img { display: block; width: 100%; height: min(90vw, 460px); object-fit: cover; object-position: 49% 53%; }
+.explore-pet-moment > div { padding: 35px 24px 38px; }
+.explore-pet-moment .eyebrow { color: #d3dfd4; }
+.explore-pet-moment h3 { margin: 10px 0 0; font: 500 clamp(2.55rem, 11vw, 4.2rem)/.9 var(--serif); letter-spacing: -.045em; }
+.explore-pet-moment p:not(.eyebrow) { max-width: 430px; margin: 17px 0 0; color: #d9e4da; font-size: .9rem; line-height: 1.65; }
+
+@media (min-width: 701px) {
+  .explore-pet-moment { grid-template-columns: minmax(0, 1.15fr) minmax(300px, .85fr); margin-top: 10px; }
+  .explore-pet-moment img { height: min(30vw, 390px); }
+  .explore-pet-moment > div { align-self: center; padding: clamp(42px, 5vw, 76px); }
+}

@@ -1,0 +1,263 @@
+/* Mobile-first practical stay guide */
+.stay-guide {
+  padding: 76px 20px;
+  background: #f7f4ed;
+  color: #143d34;
+}
+
+.stay-guide__intro {
+  max-width: 680px;
+}
+
+.stay-guide__intro h2 {
+  margin: 12px 0 16px;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(2.8rem, 12vw, 4.25rem);
+  font-weight: 500;
+  line-height: .92;
+  letter-spacing: -.045em;
+}
+
+.stay-guide__intro > p:last-child {
+  max-width: 520px;
+  margin: 0;
+  color: #466057;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.stay-guide__quick {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1px;
+  margin: 36px 0 54px;
+  border: 1px solid #d8d1c0;
+  background: #d8d1c0;
+}
+
+.stay-guide__quick article {
+  padding: 24px 22px 23px;
+  background: #ece4d7;
+}
+
+.stay-guide__quick small {
+  display: block;
+  margin-bottom: 13px;
+  color: #6d806e;
+  font-family: "Manrope", sans-serif;
+  font-size: .66rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.stay-guide__quick strong {
+  display: block;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.7rem;
+  font-weight: 600;
+  line-height: .98;
+}
+
+.stay-guide__quick p,
+.stay-guide__topic > p {
+  margin: 12px 0 0;
+  color: #466057;
+  font-size: .93rem;
+  line-height: 1.65;
+}
+
+.stay-guide__topics {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.stay-guide__topic {
+  padding: 34px 0 32px;
+  border-top: 1px solid #d8d1c0;
+}
+
+.stay-guide__topic h3 {
+  margin: 11px 0 0;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(2.2rem, 9vw, 3rem);
+  font-weight: 500;
+  line-height: .95;
+  letter-spacing: -.035em;
+}
+
+.stay-guide__topic .eyebrow {
+  margin: 0;
+}
+
+.stay-guide__topic--wide {
+  margin-top: 8px;
+  padding: 34px 24px;
+  border: 0;
+  background: #e7decf;
+}
+
+.stay-guide__help {
+  margin-top: 34px;
+  padding: 26px 24px;
+  background: #143d34;
+  color: #f7f4ed;
+}
+
+.stay-guide__help p {
+  margin: 0 0 10px;
+  color: #d3dfd4;
+  font-size: .92rem;
+}
+
+.stay-guide__help a {
+  color: #f7f4ed;
+  font-family: "Manrope", sans-serif;
+  font-size: .82rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.stay-guide__help a span {
+  display: inline-block;
+  margin-left: 6px;
+  transition: transform .2s ease;
+}
+
+.stay-guide__help a:hover span,
+.stay-guide__help a:focus-visible span {
+  transform: translateX(4px);
+}
+
+@media (min-width: 720px) {
+  .stay-guide {
+    padding: clamp(92px, 9vw, 144px) clamp(44px, 8vw, 132px);
+  }
+
+  .stay-guide__intro h2 {
+    font-size: clamp(4.3rem, 7vw, 6.9rem);
+  }
+
+  .stay-guide__quick {
+    grid-template-columns: repeat(4, 1fr);
+    margin: 48px 0 74px;
+  }
+
+  .stay-guide__quick article {
+    min-height: 220px;
+    padding: 28px 25px;
+  }
+
+  .stay-guide__topics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(42px, 6vw, 98px);
+  }
+
+  .stay-guide__topic {
+    padding: 43px 0 41px;
+  }
+
+  .stay-guide__topic h3 {
+    font-size: clamp(2.65rem, 3.5vw, 4rem);
+  }
+
+  .stay-guide__topic--wide {
+    grid-column: 1 / -1;
+    margin-top: 20px;
+    padding: 44px clamp(32px, 5vw, 70px);
+  }
+
+  .stay-guide__topic--wide > p:not(.eyebrow) {
+    max-width: 760px;
+  }
+
+  .stay-guide__help {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    margin-top: 54px;
+    padding: 28px 34px;
+  }
+
+  .stay-guide__help p {
+    margin: 0;
+  }
+}
+
+.route-contact-note { margin: 18px 0 0; color: #466057; font-size: 12px; line-height: 1.5; }
+.route-contact-note a { color: #143d34; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+
+.copy-block .season-pet {
+  margin: 28px 0 0;
+}
+
+.copy-block .season-pet img {
+  display: block;
+  width: 100%;
+  min-height: 0;
+  height: 210px;
+  object-fit: cover;
+  object-position: 52% 48%;
+}
+
+.copy-block .season-pet figcaption {
+  margin-top: 9px;
+  color: #d3dfd4;
+  font: 700 .62rem/1.35 "Manrope", sans-serif;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+
+.arrival-video {
+  display: grid;
+  grid-template-columns: minmax(0, .72fr) minmax(0, 1.28fr);
+  gap: clamp(28px, 6vw, 92px);
+  align-items: center;
+  padding: clamp(70px, 9vw, 130px) clamp(20px, 8vw, 130px);
+  background: #e8dfd0;
+}
+
+.arrival-video__heading h2 {
+  margin: 12px 0 18px;
+  color: #143d34;
+  font: 500 clamp(48px, 5.5vw, 82px)/.9 var(--serif);
+  letter-spacing: -.05em;
+}
+
+.arrival-video__heading > p:last-child {
+  max-width: 430px;
+  margin: 0;
+  color: #466057;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.arrival-video video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #143d34;
+  object-fit: cover;
+}
+
+@media (max-width: 700px), (max-aspect-ratio: 3/4) {
+  .arrival-video {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    padding: 72px 20px;
+  }
+}
+
+@media (min-width: 720px) {
+  .copy-block .season-pet {
+    max-width: 430px;
+    margin-top: 32px;
+  }
+
+  .copy-block .season-pet img {
+    height: 190px;
+  }
+}

@@ -1,0 +1,22 @@
+/* Mobile-first pet stay panel. */
+.stay-choice__pet {
+  display: grid;
+  grid-template-columns: 1fr;
+  margin-top: 12px;
+  overflow: hidden;
+  background: #143d34;
+  color: #f7f4ed;
+}
+.stay-choice__pet img { display: block; width: 100%; height: min(118vw, 540px); object-fit: cover; object-position: 50% 42%; }
+.stay-choice__pet > div { padding: 34px 24px 36px; }
+.stay-choice__pet .eyebrow { color: #d3dfd4; }
+.stay-choice__pet h3 { max-width: 510px; margin: 11px 0 0; font: 500 clamp(2.55rem, 11vw, 4rem)/.9 var(--serif); letter-spacing: -.045em; }
+.stay-choice__pet p:not(.eyebrow) { max-width: 480px; margin: 17px 0 0; color: #d9e4da; font-size: .88rem; line-height: 1.65; }
+.stay-choice__pet a { display: inline-block; margin-top: 22px; color: #f7f4ed; font: 700 .7rem/1.2 var(--sans); letter-spacing: .12em; text-decoration: none; text-transform: uppercase; }
+.stay-choice__pet a span { margin-left: 6px; }
+
+@media (min-width: 701px) {
+  .stay-choice__pet { grid-template-columns: minmax(250px, .7fr) minmax(0, 1.3fr); align-items: stretch; margin-top: clamp(18px, 2vw, 28px); }
+  .stay-choice__pet img { height: 100%; min-height: 330px; max-height: 390px; }
+  .stay-choice__pet > div { align-self: center; padding: clamp(38px, 5vw, 70px); }
+}

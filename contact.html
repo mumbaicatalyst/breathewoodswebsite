@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Contact — Breathe Woods</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="content-pages.css"><link rel="stylesheet" href="contact.css">
+  <script src="seo.js?v=2" defer></script>
+</head>
+<body data-page="contact">
+  <main>
+    <section class="page-hero contact-hero">
+      <img src="Pics/hero%20images/contacthero.jpg" alt="Breathe Woods in the green landscape of Raigad">
+      <div><p class="eyebrow">Contact</p><h1>Let’s plan<br>your escape.</h1><p>Tell us a little about the stay you have in mind. We will help with the details, personally.</p></div>
+    </section>
+    <section class="contact-enquiry" id="enquiry" aria-labelledby="enquiry-title">
+      <div class="contact-enquiry__intro">
+        <p class="eyebrow dark">Stay enquiries</p><h2 id="enquiry-title">A good stay starts with a simple hello.</h2><p>Share your preferred dates and the shape of your getaway. We will come back with availability and the right option for your group.</p>
+        <div class="contact-enquiry__direct">
+          <a href="https://wa.me/919967786444" target="_blank" rel="noreferrer"><span>01</span> WhatsApp us</a><a href="tel:+919967786444"><span>02</span> Call +91 99677 86444</a><a href="mailto:breathewoods@gmail.com"><span>03</span> breathewoods@gmail.com</a>
+        </div>
+      </div>
+      <form class="enquiry-form" name="stay-enquiry" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/contact.html?sent=1">
+        <input type="hidden" name="form-name" value="stay-enquiry"><input type="hidden" name="subject" data-remove-prefix value="New Breathe Woods stay enquiry"><p class="enquiry-form__honeypot"><label>Do not fill this out <input name="bot-field"></label></p>
+        <div class="enquiry-form__heading"><p class="eyebrow dark">Your details</p><p>We will only use these to respond to your enquiry.</p></div>
+        <div class="enquiry-form__fields">
+          <label>Full name<input name="name" type="text" autocomplete="name" required></label><label>WhatsApp number<input name="phone" type="tel" autocomplete="tel" inputmode="tel" required></label><label>Email address<input name="email" type="email" autocomplete="email" required></label><label>Where are you travelling from?<input name="travelling-from" type="text" autocomplete="address-level2" placeholder="e.g. Mumbai"></label><label>Preferred check-in<input name="check-in" type="date"></label><label>Preferred check-out<input name="check-out" type="date"></label><label>Guests<select name="guests" required><option value="" selected disabled>Select guests</option><option>1–2 guests</option><option>3–4 guests</option><option>5–6 guests</option><option>7–9 guests</option><option>10+ guests</option></select></label><label>What are you looking for?<select name="stay-type"><option value="">Choose an option</option><option>Private room / weekday stay</option><option>Bougan’villa</option><option>Zen Villa</option><option>Whole property / group stay</option><option>Not sure yet</option></select></label><label class="enquiry-form__full">Bringing a pet?<select name="pets"><option value="">No / not sure</option><option>Yes, one pet</option><option>Yes, more than one pet</option></select></label><label class="enquiry-form__full">Anything else we should know?<textarea name="note" rows="4" placeholder="Meal preferences, a celebration, accessibility needs, or any questions."></textarea></label>
+        </div>
+        <button class="enquiry-form__submit" type="submit">Send enquiry <span aria-hidden="true">→</span></button><p class="enquiry-form__note">Availability is personally confirmed before a booking. No payment is taken through this form.</p>
+      </form>
+      <p class="enquiry-form__confirmation" role="status" hidden>Thank you. Your enquiry is with us, and the Breathe Woods team will be in touch soon.</p>
+    </section>
+    <section class="contact-location" aria-labelledby="location-title">
+      <div><p class="eyebrow">Find us</p><h2 id="location-title">The turn towards quieter days.</h2></div><div class="contact-location__details"><address>Kakadshet Road, off Tala–Indapur Road<br>Muthavli Village, Indapur<br>Raigad, Maharashtra 402120</address><p>Around three hours from Mumbai and Pune, depending on traffic and conditions.</p><a href="https://maps.app.goo.gl/fBLHygWwvHLbT3ox7" target="_blank" rel="noreferrer">Open directions in Google Maps <span aria-hidden="true">→</span></a></div>
+    </section>
+  </main>
+  <script src="shell.js" defer></script>
+</body>
+</html>

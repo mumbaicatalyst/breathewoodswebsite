@@ -1,0 +1,160 @@
+/* Mobile-first social proof, kept deliberately editorial rather than widget-like. */
+.reviews-section {
+  padding: 74px 20px;
+  background: #e8dfd0;
+  color: #143d34;
+}
+
+.reviews-section__summary { max-width: 620px; }
+
+.reviews-section__summary h2 {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin: 11px 0 14px;
+  font: 500 clamp(4.7rem, 19vw, 6.6rem)/.9 var(--serif);
+  letter-spacing: -.065em;
+}
+
+.reviews-section__summary h2 span {
+  color: #a27732;
+  font: 700 clamp(.95rem, 3.5vw, 1.4rem)/1 var(--sans);
+  letter-spacing: .05em;
+}
+
+.reviews-section__rating {
+  margin: 0;
+  color: #5d7569;
+  font: 700 .68rem/1.45 var(--sans);
+  letter-spacing: .11em;
+  text-transform: uppercase;
+}
+
+.reviews-section__summary > p:not(.eyebrow):not(.reviews-section__rating) {
+  max-width: 460px;
+  margin: 19px 0 0;
+  font-size: .94rem;
+  line-height: 1.7;
+}
+
+.reviews-section__summary > a {
+  display: inline-block;
+  margin-top: 24px;
+  color: #143d34;
+  font: 700 .7rem/1.2 var(--sans);
+  letter-spacing: .12em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.reviews-section__summary > a span { margin-left: 5px; }
+
+.reviews-section__reviews {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1px;
+  margin-top: 40px;
+  background: #d0c4ae;
+  border: 1px solid #d0c4ae;
+}
+
+.reviews-section__reviews article {
+  min-height: 215px;
+  padding: 29px 24px;
+  background: #f7f4ed;
+}
+
+.reviews-section blockquote {
+  margin: 17px 0 26px;
+  color: #143d34;
+  font: 500 clamp(1.7rem, 7vw, 2.6rem)/1.02 var(--serif);
+  letter-spacing: -.035em;
+}
+
+.reviews-section footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: #496259;
+  font: 700 .66rem/1.35 var(--sans);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.reviews-section footer span:last-child {
+  flex: none;
+  color: #a27732;
+  letter-spacing: .03em;
+}
+
+.reviews-section__feature {
+  width: 100%;
+  max-width: 1060px;
+  display: grid;
+  gap: 26px;
+  margin: 40px auto 0;
+  padding: 24px;
+  background: #d8cebd;
+  border: 1px solid #cfc2ae;
+}
+
+.reviews-section__feature h3 {
+  max-width: 430px;
+  margin: 12px 0 0;
+  font: 500 clamp(2.25rem, 9vw, 3.4rem)/.92 var(--serif);
+  letter-spacing: -.045em;
+}
+
+.reviews-section__feature div > p:last-child {
+  max-width: 385px;
+  margin: 16px 0 0;
+  color: #496259;
+  font-size: .88rem;
+  line-height: 1.65;
+}
+
+.reviews-section__feature video {
+  display: block;
+  width: min(100%, 360px);
+  max-height: 520px;
+  margin: 0 auto;
+  background: #143d34;
+  object-fit: cover;
+  object-position: center top;
+}
+
+@media (min-width: 701px) {
+  .reviews-section {
+    display: grid;
+    grid-template-columns: minmax(260px, .78fr) minmax(0, 1.22fr);
+    gap: clamp(44px, 8vw, 130px);
+    align-items: end;
+    padding: clamp(88px, 9vw, 140px) clamp(42px, 8vw, 130px);
+  }
+
+  .reviews-section__reviews {
+    grid-template-columns: repeat(3, 1fr);
+    margin: 0;
+  }
+
+  .reviews-section__reviews article {
+    min-height: 300px;
+    padding: clamp(25px, 3vw, 42px);
+  }
+
+  .reviews-section blockquote { font-size: clamp(1.8rem, 2.45vw, 2.7rem); }
+
+  .reviews-section__feature {
+    max-width: 860px;
+    grid-column: 1 / -1;
+    grid-template-columns: minmax(0, 410px) 280px;
+    justify-content: center;
+    align-items: start;
+    gap: clamp(32px, 4vw, 54px);
+    margin-top: clamp(52px, 7vw, 90px);
+    padding: clamp(34px, 4vw, 58px);
+  }
+
+  .reviews-section__feature video { width: 280px; height: 420px; }
+}
