@@ -141,6 +141,7 @@ button { cursor: pointer; }
   .menu-toggle { display: grid !important; width: 28px; height: 28px; place-content: center; gap: 7px; padding: 0; border: 0; background: transparent; }
   .menu-toggle i { width: 25px; background: #fff; }
   .hero-sequence { height: 580svh; }
+  .hero-stage { height: 100dvh; min-height: 100svh; }
   .hero-frame img { object-position: var(--mobile-position, 50% 50%); }
   .scene-shade, .scene-shade--right { background: linear-gradient(0deg, rgba(6,22,17,.8), rgba(6,22,17,.23) 49%, rgba(6,22,17,.06) 79%); }
   .hero-copy, .hero-copy--right { left: 20px; right: auto; bottom: 84px; width: calc(100% - 40px); text-align: left; }
