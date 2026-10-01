@@ -41,6 +41,12 @@ button { cursor: pointer; }
 .hero-sequence { height: 620svh; position: relative; background: var(--forest); }
 .hero-stage { position: sticky; top: 0; width: 100%; height: 100svh; overflow: hidden; color: #fff; }
 .hero-frame { --scene-opacity: 0; --copy-opacity: 0; --copy-shift: 28px; --copy-blur: 7px; --copy-reveal: 0; --copy-clip: 100%; --scene-scale: 1.065; position: absolute; inset: 0; opacity: var(--scene-opacity); pointer-events: none; isolation: isolate; }
+.hero-frame::before { content: ""; position: absolute; inset: -14px; z-index: -1; background: var(--hero-placeholder) center / cover no-repeat; filter: blur(10px); transform: scale(1.03); }
+.hero-frame[data-scene="0"] { --hero-placeholder: url("Pics/optimized/home-mobile/hero-drone-1-restored-v1.png_2K_20260930101038.jpg"); }
+.hero-frame[data-scene="1"] { --hero-placeholder: url("Pics/optimized/home-mobile/hero-waterfall-new.jpg"); }
+.hero-frame[data-scene="2"] { --hero-placeholder: url("Pics/optimized/home-mobile/hero-morning.jpg"); }
+.hero-frame[data-scene="3"] { --hero-placeholder: url("Pics/optimized/home-mobile/hero-villa.jpg"); }
+.hero-frame[data-scene="4"] { --hero-placeholder: url("Pics/optimized/home-mobile/hero-relax-people.jpg"); }
 .hero-frame:nth-child(1) { z-index: 1; }.hero-frame:nth-child(2) { z-index: 2; }.hero-frame:nth-child(3) { z-index: 3; }.hero-frame:nth-child(4) { z-index: 4; }.hero-frame:nth-child(5) { z-index: 5; }
 .hero-frame.is-active { pointer-events: auto; }
 .hero-frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; transform: scale(var(--scene-scale)); will-change: transform; }

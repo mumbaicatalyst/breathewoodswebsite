@@ -7,6 +7,27 @@ const menuDialog = document.querySelector('#menuDialog');
 const sequence = document.querySelector('.hero-sequence');
 const frames = [...document.querySelectorAll('.hero-frame')];
 const scrollCue = document.querySelector('#scrollCue');
+const readyFrames = new Set([0]);
+
+frames.forEach((frame, index) => {
+  const image = frame.querySelector('img');
+  if (!image || index === 0) return;
+  const markReady = () => {
+    const decoded = image.decode ? image.decode().catch(() => {}) : Promise.resolve();
+    decoded.then(() => {
+      readyFrames.add(index);
+      updateSequence();
+    });
+  };
+  if (image.complete) markReady();
+  else {
+    image.addEventListener('load', markReady, { once: true });
+    image.addEventListener('error', () => {
+      readyFrames.add(index);
+      updateSequence();
+    }, { once: true });
+  }
+});
 
 const connection = navigator.connection;
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -92,9 +113,11 @@ function updateSequence() {
   const rect = sequence.getBoundingClientRect();
   const travel = Math.max(1, sequence.offsetHeight - window.innerHeight);
   const progress = clamp(-rect.top / travel);
+  const strengths = frames.map((frame, index) => sceneStrength(progress, ...ranges[index]));
+  if (strengths.some((strength, index) => strength > .01 && !readyFrames.has(index))) return;
 
   frames.forEach((frame, index) => {
-    const strength = sceneStrength(progress, ...ranges[index]);
+    const strength = strengths[index];
     const midpoint = (ranges[index][0] + ranges[index][1]) / 2;
     const scale = 1.075 - strength * .065 + Math.abs(progress - midpoint) * .018;
     const reveal = smooth(clamp((strength - .06) / .72));
