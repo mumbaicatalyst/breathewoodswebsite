@@ -153,6 +153,7 @@ updateSequence();
 function bookingUrl(values = {}) {
   const localBooking = ['localhost', '127.0.0.1'].includes(window.location.hostname);
   const url = new URL(localBooking ? 'http://127.0.0.1:5173/' : '/book/', window.location.origin);
+  url.searchParams.set('returnTo', window.location.href);
   Object.entries(values).forEach(([key, value]) => { if (value) url.searchParams.set(key, String(value)); });
   return url.toString();
 }
