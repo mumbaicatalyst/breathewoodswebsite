@@ -16,6 +16,13 @@ if (injectedFooter) document.body.appendChild(injectedFooter);
 const header = document.querySelector('#siteHeader');
 const menuDialog = document.querySelector('#menuDialog');
 const bookingDialog = document.querySelector('#bookingDialog');
+function bookingUrl(values = {}) {
+  const localBooking = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+  const url = new URL(localBooking ? 'http://127.0.0.1:5173/' : '/book/', window.location.origin);
+  Object.entries(values).forEach(([key, value]) => { if (value) url.searchParams.set(key, String(value)); });
+  return url.toString();
+}
+function openBooking(values = {}) { window.location.assign(bookingUrl(values)); }
 menuDialog.setAttribute('aria-label', 'Site menu');
 menuDialog.removeAttribute('aria-labelledby');
 menuDialog.querySelector('h2')?.remove();
@@ -24,10 +31,10 @@ if (oldMenuLinks) oldMenuLinks.outerHTML = '<div class="menu-contact-links" aria
 window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 40), {passive:true});
 document.querySelector('#openMenu').addEventListener('click', () => menuDialog.showModal());
 document.querySelector('#closeMenu').addEventListener('click', () => menuDialog.close());
-document.querySelectorAll('[data-book]').forEach((button) => button.addEventListener('click', () => { if (menuDialog.open) menuDialog.close(); bookingDialog.showModal(); }));
+document.querySelectorAll('[data-book]').forEach((button) => button.addEventListener('click', () => openBooking({ stay: button.dataset.bookStay })));
 document.querySelector('#closeDialog').addEventListener('click', () => bookingDialog.close());
 document.querySelector('#closeBooking').addEventListener('click', () => bookingDialog.close());
-document.querySelectorAll('[data-booking-form]').forEach((form) => form.addEventListener('submit', (event) => { event.preventDefault(); const data = new FormData(form); document.querySelector('#bookingSummary').textContent = `Requested stay: ${data.get('checkIn') || 'choose check-in'} to ${data.get('checkOut') || 'choose check-out'} · ${data.get('guests')} guest${data.get('guests') === '1' ? '' : 's'}.`; bookingDialog.showModal(); }));
+document.querySelectorAll('[data-booking-form]').forEach((form) => form.addEventListener('submit', (event) => { event.preventDefault(); const data = new FormData(form); openBooking({ checkIn: data.get('checkIn'), checkOut: data.get('checkOut'), guests: data.get('guests') }); }));
 menuDialog.querySelectorAll('a').forEach((link) => { if (link.textContent.trim() === 'Information') link.href = 'information.html'; if (link.textContent.trim() === 'Contact') link.href = 'contact.html'; });
 document.querySelectorAll('.brand img, .site-footer__brand img').forEach((logo) => { logo.src = 'Pics/Brand/logowordmarkwhite.png'; logo.alt = 'Breathe Woods'; });
 

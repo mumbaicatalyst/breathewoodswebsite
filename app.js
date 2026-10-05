@@ -150,11 +150,16 @@ window.addEventListener('scroll', () => {
 window.addEventListener('resize', updateSequence);
 updateSequence();
 
+function bookingUrl(values = {}) {
+  const localBooking = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+  const url = new URL(localBooking ? 'http://127.0.0.1:5173/' : '/book/', window.location.origin);
+  Object.entries(values).forEach(([key, value]) => { if (value) url.searchParams.set(key, String(value)); });
+  return url.toString();
+}
+function openBooking(values = {}) { window.location.assign(bookingUrl(values)); }
+
 document.querySelectorAll('[data-book]').forEach((button) => {
-  button.addEventListener('click', () => {
-    if (menuDialog.open) menuDialog.close();
-    dialog.showModal();
-  });
+  button.addEventListener('click', () => openBooking({ stay: button.dataset.bookStay }));
 });
 document.querySelector('#openMenu').addEventListener('click', () => menuDialog.showModal());
 document.querySelector('#closeMenu').addEventListener('click', () => menuDialog.close());
@@ -165,12 +170,7 @@ document.querySelectorAll('[data-booking-form]').forEach((form) => {
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     const details = new FormData(form);
-    const checkIn = details.get('checkIn');
-    const checkOut = details.get('checkOut');
-    const guests = details.get('guests');
-    const summary = document.querySelector('#bookingSummary');
-    summary.textContent = `Requested stay: ${checkIn || 'choose check-in'} to ${checkOut || 'choose check-out'} · ${guests} guest${guests === '1' ? '' : 's'}. The final site will pass these details to the approved booking system.`;
-    dialog.showModal();
+    openBooking({ checkIn: details.get('checkIn'), checkOut: details.get('checkOut'), guests: details.get('guests') });
   });
 });
 document.querySelector('#closeDialog').addEventListener('click', () => dialog.close());

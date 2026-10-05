@@ -19,10 +19,19 @@ document.querySelector('main')?.append(pageLinks);
 
 window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 40), { passive: true });
 
+function bookingUrl(values = {}) {
+  const localBooking = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+  const url = new URL(localBooking ? 'http://127.0.0.1:5173/' : '/book/', window.location.origin);
+  Object.entries(values).forEach(([key, value]) => { if (value) url.searchParams.set(key, String(value)); });
+  return url.toString();
+}
+function openBooking(values = {}) { window.location.assign(bookingUrl(values)); }
+
 document.querySelectorAll('[data-book]').forEach((button) => {
   button.addEventListener('click', () => {
-    if (menuDialog.open) menuDialog.close();
-    dialog.showModal();
+    const label = button.textContent || '';
+    const stay = button.dataset.bookStay || (label.includes('Zen Villa') ? 'zen-villa' : label.includes('Bougan') ? 'bougan-villa' : '');
+    openBooking({ stay });
   });
 });
 document.querySelector('#openMenu').addEventListener('click', () => menuDialog.showModal());
@@ -32,9 +41,7 @@ document.querySelectorAll('[data-booking-form]').forEach((form) => {
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     const details = new FormData(form);
-    const guests = details.get('guests');
-    document.querySelector('#bookingSummary').textContent = `Requested stay: ${details.get('checkIn') || 'choose check-in'} to ${details.get('checkOut') || 'choose check-out'} · ${guests} guest${guests === '1' ? '' : 's'}. The final site will pass these details to the approved booking system.`;
-    dialog.showModal();
+    openBooking({ checkIn: details.get('checkIn'), checkOut: details.get('checkOut'), guests: details.get('guests') });
   });
 });
 document.querySelector('#closeDialog').addEventListener('click', () => dialog.close());
