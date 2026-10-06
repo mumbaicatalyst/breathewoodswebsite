@@ -192,3 +192,31 @@ button { cursor: pointer; }
 }
 
 @media (max-width:700px),(max-aspect-ratio:3/4) { .site-footer__legal { display:block !important; font-size:8px; } }
+
+/* Landscape phones have desktop-like width but very little vertical space.
+   Keep the cinematic hero readable and let the shared footer stack cleanly. */
+@media (orientation: landscape) and (max-height: 700px) {
+  .site-header { min-height: 62px; padding: 5px 4vw; }
+  .site-header.scrolled { min-height: 58px; }
+  .brand { width: 116px; height: 42px; padding: 0; background: transparent; border: 0; }
+  .brand img { width: 116px; max-height: 40px; }
+  .header-actions { gap: 14px; }
+  .header-book { padding: 9px 13px; font-size: 11px; }
+  .hero-stage { height: 100svh; min-height: 340px; }
+  .hero-frame img { object-position: var(--mobile-position, 50% 50%); }
+  .hero-copy, .hero-copy--right { left: 6vw; right: auto; bottom: 84px; width: min(560px, 55vw); }
+  .hero-copy h1 { max-width: 560px; font-size: clamp(36px, 5.4vw, 62px); line-height: .92; }
+  .hero-copy h2 { max-width: 500px; font-size: clamp(36px, 5vw, 58px); line-height: .92; }
+  .hero-copy .eyebrow { margin-bottom: 10px; font-size: 10px; }
+  .hero-detail { max-width: 42ch; margin: 12px 0; font-size: 13px; line-height: 1.35; }
+  .availability-bar { left: 6vw; bottom: 18px; width: min(760px, calc(100% - 12vw)); grid-template-columns: 1fr 1fr .75fr auto; }
+  .availability-bar label { min-height: 58px; padding: 9px 13px; font-size: 9px; }
+  .availability-bar input, .availability-bar select { font-size: 13px; }
+  .availability-bar button { min-width: 86px; margin: 8px; font-size: 13px; }
+  .scroll-cue { right: 4vw; bottom: 16px; }
+  .site-footer { grid-template-columns: 92px minmax(0, 1fr); gap: 10px 20px; padding: 16px 5vw; font-size: 8px; }
+  .site-footer__brand { grid-row: 1 / span 3; align-self: center; width: 86px; }
+  .site-footer address { grid-column: 2; min-width: 0; }
+  .site-footer__contact { grid-column: 2; justify-content: flex-start; gap: 9px 16px; min-width: 0; }
+  .site-footer__legal { grid-column: 2; white-space: normal; font-size: 8px; }
+}
