@@ -172,6 +172,13 @@ button { cursor: pointer; }
   .arrival video { object-position: 50% 50%; }
 }
 
+/* A dedicated phone-only mark: tablets retain the existing stacked wordmark. */
+@media (max-width: 700px) {
+  .brand { width: 140px; height: 44px; padding: 0; }
+  .brand img { width: 140px; max-height: 42px; }
+  .site-footer__brand { width: 154px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .arrival { display: none; }

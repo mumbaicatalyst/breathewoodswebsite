@@ -37,7 +37,13 @@ document.querySelector('#closeDialog').addEventListener('click', () => bookingDi
 document.querySelector('#closeBooking').addEventListener('click', () => bookingDialog.close());
 document.querySelectorAll('[data-booking-form]').forEach((form) => form.addEventListener('submit', (event) => { event.preventDefault(); const data = new FormData(form); openBooking({ checkIn: data.get('checkIn'), checkOut: data.get('checkOut'), guests: data.get('guests') }); }));
 menuDialog.querySelectorAll('a').forEach((link) => { if (link.textContent.trim() === 'Information') link.href = 'information.html'; if (link.textContent.trim() === 'Contact') link.href = 'contact.html'; });
-document.querySelectorAll('.brand img, .site-footer__brand img').forEach((logo) => { logo.src = 'Pics/Brand/logowordmarkwhite.png'; logo.alt = 'Breathe Woods'; });
+const mobileLogoQuery = window.matchMedia('(max-width: 700px)');
+const syncBrandMarks = () => {
+  const source = mobileLogoQuery.matches ? 'Pics/Brand/breathe-woods-wordmark-mobile-white.png' : 'Pics/Brand/logowordmarkwhite.png';
+  document.querySelectorAll('.brand img, .site-footer__brand img').forEach((logo) => { logo.src = source; logo.alt = 'Breathe Woods'; });
+};
+syncBrandMarks();
+mobileLogoQuery.addEventListener('change', syncBrandMarks);
 
 document.querySelectorAll('.menu-dialog .eyebrow.dark').forEach((label) => { label.classList.add('menu-brand-mark'); label.innerHTML = '<img src="Pics/Brand/desktop-breathe-woods-logo.png" alt="Breathe Woods">'; });
 

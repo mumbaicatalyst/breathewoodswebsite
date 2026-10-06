@@ -64,10 +64,18 @@ document.querySelectorAll('.menu-dialog nav a').forEach((link) => {
   if (link.textContent.trim() === 'Dining') link.href = 'dining.html';
   if (link.textContent.trim() === 'Explore') link.href = 'explore.html';
 });
-document.querySelectorAll('.brand img, .site-footer__brand img').forEach((logo) => {
-  logo.src = 'Pics/Brand/logowordmarkwhite.png';
-  logo.alt = 'Breathe Woods';
-});
+const mobileLogoQuery = window.matchMedia('(max-width: 700px)');
+const syncBrandMarks = () => {
+  const source = mobileLogoQuery.matches
+    ? 'Pics/Brand/breathe-woods-wordmark-mobile-white.png'
+    : 'Pics/Brand/logowordmarkwhite.png';
+  document.querySelectorAll('.brand img, .site-footer__brand img').forEach((logo) => {
+    logo.src = source;
+    logo.alt = 'Breathe Woods';
+  });
+};
+syncBrandMarks();
+mobileLogoQuery.addEventListener('change', syncBrandMarks);
 document.querySelectorAll('.menu-dialog a').forEach((link) => {
   if (link.textContent.trim() === 'Contact') link.href = 'contact.html';
   if (link.textContent.trim() === 'Information') link.href = 'information.html';
