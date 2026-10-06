@@ -40,6 +40,11 @@ function stayKindLabel(kind: string) {
   return 'Villa'
 }
 
+function stayCapacityLabel(product: AvailableProduct) {
+  if (product.sellableKind === 'room_bundle') return 'Best for 2 adults + 1 child'
+  return `Sleeps up to ${product.maxOvernightGuests} guests`
+}
+
 function formatStayDate(value: string) {
   return new Intl.DateTimeFormat('en-IN', { weekday: 'short', day: 'numeric', month: 'short' }).format(new Date(`${value}T12:00:00`))
 }
@@ -421,7 +426,7 @@ export function BookingApp() {
                 {prefill.preferredStay && displayedAvailability.length > 0 && <p className="setup-note">Your selected villa is shown first when it is available.</p>}
                 {displayedAvailability.length === 0 ? <p>Try other dates, a smaller party, or message the host for a special request.</p> : displayedAvailability.map((product) => (
                   <article className="stay-option" key={product.productId}>
-                    <div><p className="option-kind">{stayKindLabel(product.sellableKind)}</p><h3>{product.productName}</h3><p>{product.sellableKind === 'room_bundle' ? 'Up to 4 guests · 2 of 3 bedrooms; the remaining bedroom may be booked separately.' : `Up to ${product.maxOvernightGuests} overnight guests`}</p></div>
+                    <div><p className="option-kind">{stayKindLabel(product.sellableKind)}</p><h3>{product.productName}</h3><p>{stayCapacityLabel(product)}{product.sellableKind === 'room_bundle' && ' · 2 of 3 bedrooms; the remaining bedroom may be booked separately.'}</p></div>
                     <div className="option-price">{product.offerDiscountBps && <span className="stay-offer">{product.offerDiscountBps / 100}% offer applied</span>}<strong>From {formatInrFromPaise(product.fromAmountPaise)}</strong>{product.offerDiscountBps && <s>{formatInrFromPaise(product.standardFromAmountPaise)}</s>}<span>{product.sellableKind === 'room_bundle' ? 'per night · two bedrooms' : 'per night'}</span><button className="secondary" onClick={() => { invalidateQuote(); setDraft({ ...draft, selectedProductId: product.productId, party: { ...draft.party, adults: searchAdults, children7To12: Math.min(searchChildren, 1), children0To6: Math.max(searchChildren - 1, 0) } }); setMealPlan(product.sellableKind === 'entire_property' ? 'all_meals' : 'breakfast'); setStage('personalise') }}>Select</button></div>
                   </article>
                 ))}
