@@ -1,0 +1,9 @@
+[build]
+  command = "cd booking-app && npm ci && VITE_APP_ENV=production VITE_APP_BASE_PATH=/book/ npm run build && rm -rf ../book && mkdir -p ../book && cp -R dist/. ../book/"
+  publish = "."
+
+[[redirects]]
+  from = "/book/*"
+  to = "/book/index.html"
+  status = 200
+  force = false

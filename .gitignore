@@ -1,3 +1,6 @@
 .netlify/
 .DS_Store
 *.log
+booking-app/node_modules/
+booking-app/dist/
+book/

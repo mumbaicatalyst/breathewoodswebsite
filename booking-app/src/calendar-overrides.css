@@ -1,0 +1,20 @@
+.rate-calendar-day.is-start,
+.rate-calendar-day.is-end,
+.rate-calendar-day.is-start:hover,
+.rate-calendar-day.is-end:hover {
+  background: #173b31;
+  color: #fff;
+}
+
+.rate-calendar-day.is-start small,
+.rate-calendar-day.is-end small,
+.rate-calendar-day.is-start:hover small,
+.rate-calendar-day.is-end:hover small {
+  color: #edf4e9;
+}
+
+.rate-calendar-day.is-start:focus-visible,
+.rate-calendar-day.is-end:focus-visible {
+  outline: 3px solid #74a59a;
+  outline-offset: 2px;
+}
