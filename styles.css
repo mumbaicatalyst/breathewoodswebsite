@@ -56,10 +56,11 @@ button { cursor: pointer; }
 .hero-copy { position: absolute; z-index: 2; left: clamp(20px, 8vw, 130px); bottom: clamp(200px, 24vh, 260px); width: min(760px, calc(100% - 40px)); text-align: left; opacity: var(--copy-opacity); clip-path: inset(0 0 var(--copy-clip) 0); filter: blur(var(--copy-blur)); transform: translate3d(0, var(--copy-shift), 0); will-change: opacity, clip-path, filter, transform; }
 .hero-copy--right { left: clamp(20px, 8vw, 130px); right: auto; text-align: left; margin-left: 0; }
 .eyebrow { margin: 0 0 18px; font-size: 10px; font-weight: 700; letter-spacing: .18em; line-height: 1.4; text-transform: uppercase; color: #e7e4d4; }
+.hero-copy .eyebrow { font-size: 12px; letter-spacing: .16em; }
 .hero-copy h1, .hero-copy h2, .booking-dialog h2 { margin: 0; font-family: var(--serif); font-weight: 500; letter-spacing: -.045em; line-height: .9; }
 .hero-copy h1 { max-width: 760px; font-size: clamp(53px, 6.55vw, 105px); }
 .hero-copy h2 { max-width: 635px; font-size: clamp(54px, 6vw, 92px); }
-.hero-detail { margin: 24px 0; font-size: 13px; letter-spacing: .04em; }
+.hero-detail { margin: 24px 0; font-size: 17px; line-height: 1.5; letter-spacing: .015em; }
 .mobile-book { display: none; }
 .availability-bar { position: absolute; z-index: 4; left: clamp(20px, 8vw, 130px); bottom: 34px; width: min(820px, calc(100% - 40px)); display: grid; grid-template-columns: 1fr 1fr .8fr auto; align-items: stretch; padding: 0; border: 1px solid rgba(61,48,37,.13); border-radius: 3px; overflow: hidden; background: rgba(247,244,237,.96); color: #3e3028; box-shadow: 0 12px 38px rgba(0,0,0,.16); }
 .availability-bar label { min-height: 78px; padding: 14px 22px; border-right: 1px solid #dfd1c0; display: grid; align-content: center; gap: 5px; font-size: 11px; color: #554338; }
@@ -155,7 +156,8 @@ button { cursor: pointer; }
   .hero-copy h2 { max-width: 360px; font-size: clamp(39px, 11vw, 48px); line-height: .92; }
   .hero-frame[data-scene="4"] .hero-copy { top: 18%; bottom: auto; }
   .eyebrow { margin-bottom: 12px; font-size: 9px; }
-  .hero-detail { margin: 17px 0; font-size: 11px; }
+  .hero-copy .eyebrow { font-size: 11px; letter-spacing: .15em; }
+  .hero-detail { margin: 17px 0; font-size: 16px; line-height: 1.5; letter-spacing: 0; }
   .availability-bar { display: none; }
   .mobile-book { display: inline-block; margin-top: 4px; padding: 10px 13px; border: 1px solid rgba(247,244,237,.84); border-radius: 2px; background: rgba(247,244,237,.27); color: #fff; font: 500 12px/1 var(--sans); backdrop-filter: blur(5px); }
   .scroll-cue { right: 16px; bottom: 21px; min-width: 42px; min-height: 42px; justify-content: center; padding: 0; border-color: rgba(247,244,237,.5); background: rgba(12,43,34,.2); }
