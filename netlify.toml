@@ -2,6 +2,14 @@
   command = "cd booking-app && npm ci && VITE_APP_ENV=production VITE_APP_BASE_PATH=/book/ npm run build && rm -rf ../book && mkdir -p ../book && cp -R dist/. ../book/"
   publish = "."
 
+# Keep the pre-launch branch available in GitHub without spending Netlify build
+# credits. Production builds from main are unaffected.
+[context.branch-deploy]
+  ignore = "exit 0"
+
+[context.deploy-preview]
+  ignore = "exit 0"
+
 [[redirects]]
   from = "/book/*"
   to = "/book/index.html"
