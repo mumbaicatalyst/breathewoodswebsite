@@ -44,6 +44,9 @@ const syncBrandMarks = () => {
 };
 syncBrandMarks();
 mobileLogoQuery.addEventListener('change', syncBrandMarks);
+const responsiveBrandStyles = document.createElement('style');
+responsiveBrandStyles.textContent = '@media (max-width: 700px) { .brand { width: 140px; height: 44px; padding: 0; } .brand img { width: 140px; max-height: 42px; } .site-footer__brand { width: 154px; } }';
+document.head.append(responsiveBrandStyles);
 
 document.querySelectorAll('.menu-dialog .eyebrow.dark').forEach((label) => { label.classList.add('menu-brand-mark'); label.innerHTML = '<img src="Pics/Brand/desktop-breathe-woods-logo.png" alt="Breathe Woods">'; });
 
