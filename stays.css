@@ -22,3 +22,9 @@
   .stay-chapter, .stay-chapter--bougan { display: flex; flex-direction: column; min-height: 0; }.stay-chapter__image, .stay-chapter--bougan .stay-chapter__image { order: 0; min-height: 111vw; max-height: 620px; }.stay-chapter--zen .stay-chapter__image img { object-position: 61% 50%; }.stay-chapter--bougan .stay-chapter__image img { object-position: 57% 50%; }.stay-chapter__content { max-width: none; padding: 72px 20px 76px; }.stay-chapter h2 { margin-bottom: 18px; }.stay-chapter__summary { margin-bottom: 27px; font-size: 14px; }.stay-specs div { grid-template-columns: 96px 1fr; }.stay-specs dd { font-size: 12px; }
   .stay-detail, .stay-detail--bougan { display: flex; flex-direction: column; min-height: 0; }.stay-detail img, .stay-detail--bougan img { order: 0; min-height: 108vw; max-height: 580px; }.stay-detail--bougan img { object-position: 58% 50%; }.stay-detail__note { max-width: none; padding: 59px 20px 63px; }.stay-detail__note > p:last-child { font-size: 49px; }
 }
+
+.villa-mobility-note { display: grid; grid-template-columns: minmax(190px, .9fr) minmax(260px, 1.6fr) auto; gap: 18px 32px; align-items: center; margin: -18px auto 78px; padding: 25px 30px; max-width: 1160px; border: 1px solid rgba(27, 66, 54, .18); border-radius: 4px; color: #1b4236; background: #f5f7ef; font-size: 14px; line-height: 1.55; }
+.villa-mobility-note strong { font-family: Georgia, serif; font-size: 20px; line-height: 1.2; }
+.villa-mobility-note span { color: #53695f; }
+.villa-mobility-note a { justify-self: end; color: #1b4236; font-weight: 700; text-decoration-thickness: 1px; text-underline-offset: 4px; white-space: nowrap; }
+@media (max-width: 760px) { .villa-mobility-note { grid-template-columns: 1fr; gap: 8px; margin: -30px 20px 55px; padding: 22px 20px; }.villa-mobility-note strong { font-size: 18px; }.villa-mobility-note a { justify-self: start; margin-top: 4px; } }
