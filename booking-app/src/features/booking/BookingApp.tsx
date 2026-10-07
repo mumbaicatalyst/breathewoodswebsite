@@ -9,6 +9,12 @@ import { RateCalendar } from './RateCalendar'
 import { PrivacyMessagingContent } from '../legal/PrivacyMessagingNotice'
 import { CancellationRefundContent } from '../legal/CancellationRefundTerms'
 
+declare global {
+  interface Window {
+    gtag?: (command: string, eventName: string, params?: Record<string, string | number>) => void
+  }
+}
+
 const initialDraft: BookingDraft = {
   checkIn: '',
   checkOut: '',
@@ -32,6 +38,10 @@ const countryCodes = [
 ]
 
 const bookingAsset = (fileName: string) => `${import.meta.env.BASE_URL}${fileName}`
+
+function trackAnalyticsEvent(name: string, params: Record<string, string | number> = {}) {
+  window.gtag?.('event', name, params)
+}
 
 function stayKindLabel(kind: string) {
   if (kind === 'entire_property') return 'Entire property'
@@ -369,6 +379,11 @@ export function BookingApp() {
         mealPlan, bonfireSessions, lakeTripGuests, experienceSelections: selectedExperiences, guestName, guestEmail, guestPhone: guestPhoneE164, marketingOptIn,
       })
       setReservationRequest(result)
+      trackAnalyticsEvent('reservation_request_submitted', {
+        currency: 'INR',
+        value: result.total_paise / 100,
+        guest_count: draft.party.adults + draft.party.children7To12 + draft.party.children0To6,
+      })
       setStage('request')
     } catch (error) {
       setRequestError(error instanceof Error ? error.message : 'We could not send your request. Please try again.')
