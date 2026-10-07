@@ -41,7 +41,7 @@ function stayKindLabel(kind: string) {
 }
 
 function stayCapacityLabel(product: AvailableProduct) {
-  if (product.sellableKind === 'room_bundle') return 'Best for 2 adults + 1 child'
+  if (product.sellableKind === 'room') return 'Best for 2 adults + 1 child'
   return `Sleeps up to ${product.maxOvernightGuests} guests`
 }
 
