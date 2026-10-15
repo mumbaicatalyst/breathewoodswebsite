@@ -16,6 +16,7 @@ export type ReservationDetail = {
     source: string; guest_name: string | null; guest_email: string | null; guest_phone: string | null
     product_name: string | null; internal_note: string | null; total_paise: number | null; requested_stay_available: boolean
   }
+  payment_summary?: { total_paise: number; paid_paise: number; balance_paise: number; state: 'unpaid' | 'partial' | 'paid' }
   items: Array<{ label: string; quantity: number; amount_paise: number; item_type: string }>
   payment: { provider: string; state: string; amount_paise: number; provider_reference: string | null; expires_at: string | null } | null
   cancellation_policy: { refund_percent: number; refund_paise: number; decision: string; message: string; date_change_allowed: boolean } | null
@@ -112,6 +113,26 @@ export async function confirmOwnerAssistedPayment(reservationId: string, payment
   const { data, error } = await supabase.rpc('owner_confirm_assisted_payment', { p_reservation_id: reservationId, p_payment_reference: paymentReference || null })
   if (error) throw new Error(error.message)
   return data as { status: string; reference: string }
+}
+
+export async function confirmOwnerBookingWithPayment(reservationId: string, amountReceivedPaise: number, paymentReference: string) {
+  if (!supabase) throw new Error('UAT connection has not been configured.')
+  const { data, error } = await supabase.rpc('owner_confirm_booking_with_partial_payment', {
+    p_reservation_id: reservationId, p_amount_received_paise: amountReceivedPaise,
+    p_payment_reference: paymentReference || null,
+  })
+  if (error) throw new Error(error.message)
+  return data as { status: string; reference: string; paid_paise: number; balance_paise: number }
+}
+
+export async function recordOwnerBookingPayment(reservationId: string, amountReceivedPaise: number, paymentReference: string) {
+  if (!supabase) throw new Error('UAT connection has not been configured.')
+  const { data, error } = await supabase.rpc('owner_record_booking_payment', {
+    p_reservation_id: reservationId, p_amount_received_paise: amountReceivedPaise,
+    p_payment_reference: paymentReference || null,
+  })
+  if (error) throw new Error(error.message)
+  return data as { status: string; paid_paise: number; balance_paise: number }
 }
 
 export async function getOwnerPaymentInstructions() {
