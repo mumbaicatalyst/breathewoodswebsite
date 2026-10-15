@@ -3,4 +3,6 @@
 *.log
 booking-app/node_modules/
 booking-app/dist/
+booking-app/.env*
+!booking-app/.env.example
 book/

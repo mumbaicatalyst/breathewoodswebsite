@@ -1,4 +1,6 @@
 import { supabase } from '../../lib/supabase'
+import { getBookingQuote, type BookingQuote, type QuoteInput } from '../booking/quote'
+import type { ExperienceSelection } from '../booking/experiences'
 
 export type CalendarRow = {
   resource_id: string; resource_name: string; resource_kind: string; allocation_id: string | null; block_id: string | null; reservation_id: string | null; allocation_state: 'hold' | 'confirmed' | 'block' | null; hold_expires_at: string | null; check_in: string | null; check_out: string | null; reservation_reference: string | null; reservation_status: string | null; guest_name: string | null; block_reason: string | null
@@ -7,7 +9,7 @@ export type BlockTarget = { target_id: string; scope: 'room' | 'villa' | 'proper
 export type ReservationRequestRow = { reservation_id: string; reference: string; status: string; check_in: string; check_out: string; guest_name: string | null; product_name: string | null; total_paise: number | null; created_at: string }
 export type ReservationAlternative = { product_id: string; product_code: string; product_name: string; sellable_kind: string; total_paise: number }
 export type OwnerBookableProduct = { product_id: string; product_code: string; product_name: string; sellable_kind: string }
-export type OwnerBookingQuote = { total_paise: number; items: Array<{ label: string; quantity?: number; amount_paise: number }>; notice?: string }
+export type OwnerBookingQuote = BookingQuote
 
 export type ReservationDetail = {
   reservation: {
@@ -77,21 +79,14 @@ export async function getOwnerBookableProducts() {
   return data as OwnerBookableProduct[]
 }
 
-export async function getOwnerBookingQuote(productId: string, checkIn: string, checkOut: string, adults: number, children7To12: number, children0To6: number, pets: number) {
-  if (!supabase) throw new Error('UAT connection has not been configured.')
-  const { data, error } = await supabase.rpc('get_booking_quote_with_experiences', {
-    p_product_id: productId, p_check_in: checkIn, p_check_out: checkOut,
-    p_adults: adults, p_children_7_to_12: children7To12, p_children_0_to_6: children0To6,
-    p_pets: pets, p_meal_plan: 'breakfast', p_bonfire_sessions: 0, p_lake_outings: 0,
-    p_lake_trip_guests: 0, p_experience_selections: [],
-  })
-  if (error) throw new Error(error.message)
-  return data as OwnerBookingQuote
+export async function getOwnerBookingQuote(input: QuoteInput) {
+  return getBookingQuote(input)
 }
 
 export type AssistedBookingInput = {
   productId: string; checkIn: string; checkOut: string; adults: number; children7To12: number; children0To6: number; pets: number
   guestName: string; guestEmail: string; guestPhone: string; source: string; totalPaise: number | null; paymentState: 'not_recorded' | 'pending' | 'paid'; paymentReference: string; internalNote: string
+  mealPlan: QuoteInput['mealPlan']; bonfireSessions: number; lakeTripGuests: number; experienceSelections: ExperienceSelection[]
 }
 
 export async function createOwnerAssistedBooking(input: AssistedBookingInput) {
@@ -103,6 +98,8 @@ export async function createOwnerAssistedBooking(input: AssistedBookingInput) {
     p_guest_phone: input.guestPhone || null, p_source: input.source, p_total_paise: input.totalPaise,
     p_payment_state: input.paymentState, p_payment_reference: input.paymentReference || null,
     p_internal_note: input.internalNote || null,
+    p_meal_plan: input.mealPlan, p_bonfire_sessions: input.bonfireSessions,
+    p_lake_trip_guests: input.lakeTripGuests, p_experience_selections: input.experienceSelections,
   })
   if (error) throw new Error(error.message)
   return data as { reservation_id: string; reference: string }
