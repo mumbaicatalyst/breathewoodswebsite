@@ -113,4 +113,5 @@ input[type="checkbox"] { width: auto; accent-color: #173b31; }
 .owner-calendar-rate s { color:#7a877e; font-weight:500; }
 .owner-selected-day-rate { padding:10px; border-radius:8px; background:#eaf3e7; color:#536157 !important; }
 .owner-selected-day-rate strong { color:#173b31; }
+.payment-entry-hint { color:#7a877e !important; font-size:.72rem !important; font-weight:500; line-height:1.35 !important; }
 @media (max-width: 760px) { .meal-pricing-editor, .manual-experience-options { grid-template-columns:1fr; }.meal-pricing-editor fieldset { grid-template-columns:1fr; }.manual-experience-options h3, .manual-experience-options > p { grid-column:1; } }
