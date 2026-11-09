@@ -4,30 +4,60 @@ const skipArrival = document.querySelector('#skipArrival');
 const header = document.querySelector('#siteHeader');
 const dialog = document.querySelector('#bookingDialog');
 const menuDialog = document.querySelector('#menuDialog');
-const sequence = document.querySelector('.hero-sequence');
 const frames = [...document.querySelectorAll('.hero-frame')];
-const scrollCue = document.querySelector('#scrollCue');
-const readyFrames = new Set([0]);
+let activeHeroIndex = 0;
+let carouselTimer = null;
+const carouselInterval = 7000;
+
+function setActiveHero(index) {
+  activeHeroIndex = index;
+  frames.forEach((frame, frameIndex) => {
+    const active = frameIndex === index;
+    frame.classList.toggle('is-active', active);
+    frame.setAttribute('aria-hidden', String(!active));
+    frame.inert = !active;
+  });
+
+  const nextImage = frames[(index + 1) % frames.length]?.querySelector('img');
+  if (nextImage && !nextImage.complete) nextImage.loading = 'eager';
+}
+
+function showHero(index) {
+  const image = frames[index]?.querySelector('img');
+  if (!image || image.complete) {
+    setActiveHero(index);
+    return;
+  }
+
+  image.loading = 'eager';
+  const reveal = () => {
+    const decoded = image.decode ? image.decode().catch(() => {}) : Promise.resolve();
+    decoded.then(() => setActiveHero(index));
+  };
+  image.addEventListener('load', reveal, { once: true });
+  image.addEventListener('error', () => setActiveHero(index), { once: true });
+}
+
+function startHeroCarousel() {
+  if (carouselTimer || frames.length < 2) return;
+  carouselTimer = window.setInterval(() => {
+    const bookingFormHasFocus = document.querySelector('.availability-bar--persistent')?.contains(document.activeElement);
+    if (document.hidden || bookingFormHasFocus || sequenceIsOutOfView()) return;
+    showHero((activeHeroIndex + 1) % frames.length);
+  }, carouselInterval);
+}
+
+function sequenceIsOutOfView() {
+  const rect = document.querySelector('.hero-sequence').getBoundingClientRect();
+  return rect.bottom <= 0 || rect.top >= window.innerHeight;
+}
 
 frames.forEach((frame, index) => {
-  const image = frame.querySelector('img');
-  if (!image || index === 0) return;
-  const markReady = () => {
-    const decoded = image.decode ? image.decode().catch(() => {}) : Promise.resolve();
-    decoded.then(() => {
-      readyFrames.add(index);
-      updateSequence();
-    });
-  };
-  if (image.complete) markReady();
-  else {
-    image.addEventListener('load', markReady, { once: true });
-    image.addEventListener('error', () => {
-      readyFrames.add(index);
-      updateSequence();
-    }, { once: true });
-  }
+  frame.setAttribute('aria-hidden', String(index !== 0));
+  frame.inert = index !== 0;
 });
+setActiveHero(0);
+const heroStage = document.querySelector('.hero-stage');
 
 const connection = navigator.connection;
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -73,6 +103,7 @@ function finishArrival(force = false) {
   }
   arrivalFinished = true;
   arrival.classList.add('done');
+  startHeroCarousel();
 }
 
 arrivalVideo.addEventListener('ended', finishArrival);
@@ -94,61 +125,13 @@ if ('IntersectionObserver' in window) {
   deferredVideos.forEach((video) => attachDeferredVideo(video));
 }
 
-const ranges = [[0, .215], [.20, .415], [.40, .615], [.60, .815], [.80, 1]];
-const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value));
-
-function smooth(value) {
-  const t = clamp(value);
-  return t * t * (3 - 2 * t);
-}
-
-function sceneStrength(progress, start, end) {
-  const edge = Math.min(.03, (end - start) / 2);
-  const fadeIn = start === 0 ? 1 : smooth((progress - start) / edge);
-  const fadeOut = end === 1 ? 1 : 1 - smooth((progress - (end - edge)) / edge);
-  return fadeIn * fadeOut;
-}
-
-function updateSequence() {
-  const rect = sequence.getBoundingClientRect();
-  const travel = Math.max(1, sequence.offsetHeight - window.innerHeight);
-  const progress = clamp(-rect.top / travel);
-  const strengths = frames.map((frame, index) => sceneStrength(progress, ...ranges[index]));
-  if (strengths.some((strength, index) => strength > .01 && !readyFrames.has(index))) return;
-
-  frames.forEach((frame, index) => {
-    const strength = strengths[index];
-    const midpoint = (ranges[index][0] + ranges[index][1]) / 2;
-    const scale = 1.075 - strength * .065 + Math.abs(progress - midpoint) * .018;
-    const reveal = smooth(clamp((strength - .06) / .72));
-
-    frame.style.setProperty('--scene-opacity', strength.toFixed(3));
-    frame.style.setProperty('--copy-opacity', reveal.toFixed(3));
-    frame.style.setProperty('--copy-shift', `${(1 - reveal) * 34}px`);
-    frame.style.setProperty('--copy-blur', `${(1 - reveal) * 7}px`);
-    frame.style.setProperty('--copy-reveal', reveal.toFixed(3));
-    frame.style.setProperty('--copy-clip', `${(1 - reveal) * 100}%`);
-    frame.style.setProperty('--scene-scale', scale.toFixed(3));
-    frame.style.setProperty('--mobile-position', frame.dataset.mobilePosition);
-    frame.classList.toggle('is-active', strength > .5);
-  });
-
-  scrollCue.style.opacity = String(clamp(1 - progress * 7));
+function updateHeader() {
   header.classList.toggle('scrolled', window.scrollY > 40);
 }
 
-let ticking = false;
-window.addEventListener('scroll', () => {
-  if (ticking) return;
-  requestAnimationFrame(() => {
-    updateSequence();
-    ticking = false;
-  });
-  ticking = true;
-}, { passive: true });
-
-window.addEventListener('resize', updateSequence);
-updateSequence();
+window.addEventListener('scroll', updateHeader, { passive: true });
+window.addEventListener('resize', updateHeader);
+updateHeader();
 
 function bookingUrl(values = {}) {
   const localBooking = ['localhost', '127.0.0.1'].includes(window.location.hostname);
@@ -184,18 +167,6 @@ document.querySelectorAll('.menu-dialog nav a').forEach((link) => {
   if (link.textContent.trim() === 'Dining') link.href = 'dining.html';
   if (link.textContent.trim() === 'Explore') link.href = 'explore.html';
 });
-const mobileLogoQuery = window.matchMedia('(max-width: 700px)');
-const syncBrandMarks = () => {
-  const source = mobileLogoQuery.matches
-    ? 'Pics/Brand/breathe-woods-wordmark-mobile-white.png'
-    : 'Pics/Brand/logowordmarkwhite.png';
-  document.querySelectorAll('.brand img, .site-footer__brand img').forEach((logo) => {
-    logo.src = source;
-    logo.alt = 'Breathe Woods';
-  });
-};
-syncBrandMarks();
-mobileLogoQuery.addEventListener('change', syncBrandMarks);
 document.querySelectorAll('.menu-dialog a').forEach((link) => {
   if (link.textContent.trim() === 'Contact') link.href = 'contact.html';
   if (link.textContent.trim() === 'Information') link.href = 'information.html';
