@@ -30,6 +30,12 @@
   force = true
 
 [[redirects]]
+  from = "/about-us"
+  to = "/property.html"
+  status = 301
+  force = true
+
+[[redirects]]
   from = "/contact"
   to = "/contact.html"
   status = 301
@@ -44,5 +50,17 @@
 [[redirects]]
   from = "/our-property-1"
   to = "/property.html"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/privacy-policy"
+  to = "/book/privacy-and-messaging"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/cancellations-and-refunds.html"
+  to = "/cancellation-and-refunds.html"
   status = 301
   force = true
