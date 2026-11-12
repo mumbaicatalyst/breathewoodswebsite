@@ -15,3 +15,34 @@
   to = "/book/index.html"
   status = 200
   force = false
+
+# Permanent redirects from the previous Wix URL structure.
+[[redirects]]
+  from = "/rooms-rates"
+  to = "/stays.html"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/about_us"
+  to = "/property.html"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/contact"
+  to = "/contact.html"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/our-property"
+  to = "/property.html"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/our-property-1"
+  to = "/property.html"
+  status = 301
+  force = true

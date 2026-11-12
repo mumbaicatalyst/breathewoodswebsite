@@ -23,7 +23,4 @@
     if (bookingTrigger) window.gtag?.('event', 'booking_start', { source: bookingTrigger.textContent.trim() });
   });
 
-  document.addEventListener('submit', (event) => {
-    if (event.target.matches?.('.enquiry-form')) window.gtag?.('event', 'enquiry_submit');
-  });
 })();

@@ -1,10 +1,11 @@
-import { useEffect, useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
 import type { Session } from '@supabase/supabase-js'
 import { appConfig, isSupabaseConfigured } from '../../lib/config'
 import { supabase } from '../../lib/supabase'
 import { getGuestExperiences, experiencePriceLabel, type ExperienceSelection, type GuestExperience } from '../booking/experiences'
 import { OwnerOverview } from './OwnerOverview'
 import { OwnerManagement } from './OwnerManagement'
+import { OwnerReservationEditor } from './OwnerReservationEditor'
 import { confirmOwnerBookingWithPayment, createOwnerAssistedBooking, getOwnerBookableProducts, getOwnerBookingQuote, getOwnerCalendar, getOwnerOpenReservationRequests, getOwnerPaymentInstructions, getOwnerReservationAlternatives, getOwnerReservationDetail, offerAlternativeDates, offerAlternativeStay, ownerReservationAction, recordOwnerBookingPayment, recordOwnerReservationEvent, saveOwnerPaymentInstructions, simulateUatSuccessfulPayment, type CalendarRow, type OwnerBookableProduct, type ReservationAlternative, type ReservationDetail, type ReservationRequestRow, type OwnerBookingQuote } from './calendar'
 
 function isoDate(date: Date) {
@@ -38,6 +39,9 @@ export function OwnerDashboard() {
   const [reservationRequests, setReservationRequests] = useState<ReservationRequestRow[]>([])
   const [calendarError, setCalendarError] = useState<string | null>(null)
   const [selectedBooking, setSelectedBooking] = useState<ReservationDetail | null>(null)
+  const [isDetailPanelOpen, setIsDetailPanelOpen] = useState(false)
+  const detailRequestSequence = useRef(0)
+  const [editingReservation, setEditingReservation] = useState(false)
   const [detailError, setDetailError] = useState<string | null>(null)
   const [isLoadingDetail, setIsLoadingDetail] = useState(false)
   const [isSimulatingPayment, setIsSimulatingPayment] = useState(false)
@@ -89,6 +93,13 @@ export function OwnerDashboard() {
     const { data: listener } = supabase.auth.onAuthStateChange((_event, nextSession) => setSession(nextSession))
     return () => listener.subscription.unsubscribe()
   }, [])
+
+  useEffect(() => {
+    if (!isDetailPanelOpen) return
+    function closeOnEscape(event: KeyboardEvent) { if (event.key === 'Escape') closeBookingDetail() }
+    window.addEventListener('keydown', closeOnEscape)
+    return () => window.removeEventListener('keydown', closeOnEscape)
+  }, [isDetailPanelOpen])
 
   useEffect(() => {
     if (!session) return
@@ -248,22 +259,37 @@ export function OwnerDashboard() {
   }
 
   async function loadBookingDetail(reservationId: string) {
+    const requestSequence = ++detailRequestSequence.current
+    setIsDetailPanelOpen(true)
+    setSelectedBooking((current) => current?.reservation.id === reservationId ? current : null)
     setIsLoadingDetail(true)
     setDetailError(null)
     setOwnerPaymentAmount('0')
     setOwnerPaymentReference('')
     try {
       const booking = await getOwnerReservationDetail(reservationId)
+      if (requestSequence !== detailRequestSequence.current) return
       setSelectedBooking(booking)
+      setEditingReservation(false)
       setAlternativeCheckIn(booking.reservation.check_in)
       setAlternativeCheckOut(booking.reservation.check_out)
       void loadStayAlternatives(reservationId)
     } catch (error) {
+      if (requestSequence !== detailRequestSequence.current) return
       setSelectedBooking(null)
       setDetailError(error instanceof Error ? error.message : 'Unable to load booking details.')
     } finally {
-      setIsLoadingDetail(false)
+      if (requestSequence === detailRequestSequence.current) setIsLoadingDetail(false)
     }
+  }
+
+  function closeBookingDetail() {
+    detailRequestSequence.current += 1
+    setIsDetailPanelOpen(false)
+    setSelectedBooking(null)
+    setIsLoadingDetail(false)
+    setDetailError(null)
+    setEditingReservation(false)
   }
 
   async function loadStayAlternatives(reservationId: string) {
@@ -382,7 +408,7 @@ export function OwnerDashboard() {
     setStart(nextStart)
     setEnd(nextEnd)
     setDashboardView('reservations')
-    setSelectedBooking(null)
+    closeBookingDetail()
     if (reservationId) void loadBookingDetail(reservationId)
   }
 
@@ -404,12 +430,15 @@ export function OwnerDashboard() {
     return groups
   }, {})
   const bookingAgenda = (() => {
-    const groups = new Map<string, { row: CalendarRow; resources: string[] }>()
+    const groups = new Map<string, { row: CalendarRow; roomNames: string[]; otherResourceNames: string[] }>()
     for (const row of calendarRows) {
       if (!row.reservation_id || !row.check_in || !row.check_out) continue
       const group = groups.get(row.reservation_id)
-      if (group) group.resources.push(row.resource_name)
-      else groups.set(row.reservation_id, { row, resources: [row.resource_name] })
+      const resourceNames = row.resource_kind === 'room' ? { roomNames: [row.resource_name], otherResourceNames: [] } : { roomNames: [], otherResourceNames: [row.resource_name] }
+      if (group) {
+        group.roomNames.push(...resourceNames.roomNames)
+        group.otherResourceNames.push(...resourceNames.otherResourceNames)
+      } else groups.set(row.reservation_id, { row, ...resourceNames })
     }
     return [...groups.values()].sort((left, right) => left.row.check_in!.localeCompare(right.row.check_in!))
   })()
@@ -479,7 +508,7 @@ export function OwnerDashboard() {
         <section className="owner-reservations-main">
           <section className="reservation-agenda">
             <header><div><p className="eyebrow">Stay agenda</p><h2>Upcoming stays &amp; payment holds</h2><p>Each booking appears once, even when it occupies multiple rooms.</p></div><b>{bookingAgenda.length}</b></header>
-            {bookingAgenda.length === 0 ? <p className="agenda-empty">No confirmed stays or active payment holds in this date range.</p> : <div>{bookingAgenda.map(({ row, resources }) => <button key={row.reservation_id} className="agenda-row" onClick={() => void loadBookingDetail(row.reservation_id!)}><span><strong>{row.guest_name ?? row.reservation_reference ?? 'Guest stay'}</strong><small>{formatOwnerDate(row.check_in!)} → {formatOwnerDate(row.check_out!)} · {resources.length === 1 ? resources[0] : `${resources.length} rooms`}</small></span><b className={row.allocation_state === 'hold' ? 'hold' : ''}>{row.allocation_state === 'hold' ? 'Payment hold' : 'Confirmed'}</b></button>)}</div>}
+            {bookingAgenda.length === 0 ? <p className="agenda-empty">No confirmed stays or active payment holds in this date range.</p> : <div>{bookingAgenda.map(({ row, roomNames, otherResourceNames }) => <button key={row.reservation_id} className="agenda-row" onClick={() => void loadBookingDetail(row.reservation_id!)}><span><strong>{row.guest_name ?? row.reservation_reference ?? 'Guest stay'}</strong><small>{formatOwnerDate(row.check_in!)} → {formatOwnerDate(row.check_out!)} · {roomNames.length > 1 ? `${roomNames.length} rooms` : roomNames[0] ?? otherResourceNames.join(', ')}</small></span><b className={row.allocation_state === 'hold' ? 'hold' : ''}>{row.allocation_state === 'hold' ? 'Payment hold' : 'Confirmed'}</b></button>)}</div>}
           </section>
           {blockAgenda.length > 0 && <section className="reservation-block-summary"><header><div><p className="eyebrow">Availability blocks</p><h2>Owner and maintenance use</h2></div><b>{blockAgenda.length}</b></header><div>{blockAgenda.map(({ row, resources }) => <article key={row.block_id}><span><strong>{row.block_reason ?? 'Operational block'}</strong><small>{formatOwnerDate(row.check_in!)} → {formatOwnerDate(row.check_out!)} · {resources.length} {resources.length === 1 ? 'room' : 'rooms'}</small></span></article>)}</div></section>}
           <section className="inventory-ledger">
@@ -498,13 +527,16 @@ export function OwnerDashboard() {
             </section>)}</div>}
           </section>
         </section>
-        <aside className="booking-detail-panel">
+        {isDetailPanelOpen && <button className="booking-detail-backdrop" aria-label="Close booking details" onClick={closeBookingDetail} />}
+        <aside className={`booking-detail-panel ${isDetailPanelOpen ? 'is-open' : ''}`} role={isDetailPanelOpen ? 'dialog' : undefined} aria-modal={isDetailPanelOpen ? true : undefined} aria-label={isDetailPanelOpen ? 'Booking details' : undefined}>
           {isLoadingDetail && <p>Loading booking…</p>}
           {detailError && <p className="form-error">{detailError}</p>}
           {!isLoadingDetail && !detailError && !selectedBooking && <><p className="eyebrow">Booking details</p><h2>Select a booking</h2><p>Choose “View booking” beside a reservation to see its full operational summary.</p></>}
           {selectedBooking && <>
-            <div className="detail-heading"><div><p className="eyebrow">{selectedBooking.reservation.status.replace('_', ' ')}</p><h2>{selectedBooking.reservation.reference}</h2></div><button className="secondary" onClick={() => setSelectedBooking(null)}>Close</button></div>
+            <div className="detail-heading"><div><p className="eyebrow">{selectedBooking.reservation.status.replace('_', ' ')}</p><h2>{selectedBooking.reservation.reference}</h2></div><button className="secondary" onClick={closeBookingDetail}>Close</button></div>
             {workflowMessage && <p className="workflow-message">{workflowMessage}</p>}
+            {selectedBooking.reservation.status !== 'cancelled' && selectedBooking.reservation.status !== 'declined' && <div className="booking-edit-entry"><span>Correct guest, stay, selections, pricing, or notes for this booking.</span><button className="secondary" type="button" onClick={() => setEditingReservation((editing) => !editing)}>{editingReservation ? 'Close editor' : 'Edit booking'}</button></div>}
+            {editingReservation && <OwnerReservationEditor booking={selectedBooking} onCancel={() => setEditingReservation(false)} onSaved={async () => { await Promise.all([loadBookingDetail(selectedBooking.reservation.id), loadCalendar()]); setEditingReservation(false); setWorkflowMessage('Booking details updated. Existing payments were retained.') }} />}
             {['requested', 'in_conversation', 'alternative_offered'].includes(selectedBooking.reservation.status) && !selectedBooking.reservation.requested_stay_available && <div className="availability-blocked"><strong>These requested dates cannot be booked</strong><span>The stay selected by the guest is no longer available. Do not place a payment hold or confirm this request. You can offer different dates below or contact the guest to explain.</span><div>{selectedBooking.reservation.guest_phone && <a className="secondary" target="_blank" rel="noreferrer" href={`https://wa.me/${selectedBooking.reservation.guest_phone.replace(/\D/g, '')}?text=${encodeURIComponent(guestUnavailableMessage())}`}>Open WhatsApp message</a>}{selectedBooking.reservation.guest_email && <a className="secondary" href={`mailto:${selectedBooking.reservation.guest_email}?subject=${encodeURIComponent('Update on your Breathe Woods request')}&body=${encodeURIComponent(guestUnavailableMessage())}`}>Open email message</a>}<button className="secondary" onClick={() => void recordOperationalEvent('guest_contacted')} disabled={isUpdatingReservation}>Mark guest contacted</button><button className="text-button" onClick={() => void runWorkflowAction('decline')} disabled={isUpdatingReservation}>Close request</button></div></div>}
             <div className="detail-section"><strong>{selectedBooking.reservation.product_name ?? 'Stay'}</strong><span>{selectedBooking.reservation.check_in} → {selectedBooking.reservation.check_out}</span></div>
             <div className="detail-section"><strong>{selectedBooking.reservation.guest_name ?? 'Guest details unavailable'}</strong>{selectedBooking.reservation.guest_phone && <span>{selectedBooking.reservation.guest_phone}</span>}{selectedBooking.reservation.guest_email && <span>{selectedBooking.reservation.guest_email}</span>}</div>
