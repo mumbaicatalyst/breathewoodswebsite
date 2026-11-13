@@ -79,14 +79,14 @@ button { cursor: pointer; }
 
 .eyebrow.dark { color: #527167; }
 
-.intro-section { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(280px, .85fr); gap: clamp(44px, 9vw, 170px); padding: clamp(110px, 13vw, 190px) clamp(20px, 8vw, 130px); background: var(--paper); }
+.intro-section { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(320px, .85fr); align-items: center; gap: clamp(40px, 7vw, 110px); padding: clamp(68px, 7vw, 104px) clamp(20px, 8vw, 130px); background: var(--paper); }
 .intro-section, .reviews-section, .villa-section, .breakfast-section, .experience-section, .pet-section, .final-booking-section { content-visibility: auto; contain-intrinsic-size: 720px; }
 .intro-section__lead h2, .section-heading h2, .breakfast-section h2, .pet-section h2 { margin: 0; font: 500 clamp(55px, 6.7vw, 102px)/.9 var(--serif); letter-spacing: -.045em; }
 .intro-section__lead h2 { max-width: 660px; }
-.intro-section__body { max-width: 430px; padding-top: 11px; font-size: 16px; line-height: 1.7; }
+.intro-section__body { max-width: 520px; padding-top: 0; font-size: 15px; line-height: 1.55; }
 .intro-section__body > p { margin: 0; }
-.stay-facts { display: grid; gap: 18px; margin: 42px 0 0; }
-.stay-facts div { display: grid; grid-template-columns: 116px 1fr; padding-top: 14px; border-top: 1px solid rgba(24,51,44,.17); }
+.stay-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 28px; margin: 25px 0 0; }
+.stay-facts div { display: grid; grid-template-columns: 1fr; gap: 5px; padding: 12px 0; border-top: 1px solid rgba(24,51,44,.17); }
 .stay-facts dt { font: 600 17px/1 var(--sans); }.stay-facts dd { margin: 0; color: #587168; font-size: 13px; }
 
 .villa-section { padding: clamp(88px, 8vw, 138px) clamp(20px, 4vw, 70px) clamp(120px, 13vw, 190px); background: var(--paper); }
@@ -131,6 +131,22 @@ button { cursor: pointer; }
 .menu-dialog h2 { margin: 0 0 50px; font: 500 clamp(54px,7vw,86px)/.9 var(--serif); letter-spacing: -.045em; }
 .menu-dialog nav { display: grid; gap: 14px; margin-bottom: 42px; }
 .menu-dialog nav a { color: var(--ink); text-decoration: none; font: 500 31px/1 var(--serif); }
+
+/* Desktop readability pass: make the eyebrow and supporting copy easier to scan
+   without changing the mobile type scale or compact metadata labels. */
+@media (min-width: 701px) and (min-aspect-ratio: 3/4) {
+  .hero-copy .eyebrow,
+  .page-hero .eyebrow { font-size: 13px; letter-spacing: .14em; }
+  .hero-detail,
+  .page-hero p:not(.eyebrow),
+  .content-heading > p:last-child,
+  .intro-section__body,
+  .section-heading > p:last-child,
+  .breakfast-section__copy > p:not(.eyebrow),
+  .experience-section__copy > p:last-child,
+  .pet-section__copy > p:last-child,
+  .final-booking-section__intro > p:last-child { font-size: 17px; }
+}
 
 @keyframes scroll-line { 0%,100% { transform: scaleX(.3); opacity: .48; } 50% { transform: scaleX(1); opacity: 1; } }
 @keyframes scroll-nudge { 0%,100% { transform: translateY(-2px); opacity: .56; } 50% { transform: translateY(3px); opacity: 1; } }
@@ -192,6 +208,11 @@ button { cursor: pointer; }
   }
 
 @media (max-width:700px),(max-aspect-ratio:3/4) { .site-footer__legal { display:block !important; font-size:8px; } }
+
+@media (max-width:700px),(max-aspect-ratio:3/4) {
+  .intro-section { align-items: start; }
+  .stay-facts { grid-template-columns: 1fr; }
+}
 
 /* Landscape phones have desktop-like width but very little vertical space.
    Keep the cinematic hero readable and let the shared footer stack cleanly. */
