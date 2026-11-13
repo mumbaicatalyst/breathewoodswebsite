@@ -197,6 +197,12 @@ export function BookingApp() {
   const quoteRequestId = useRef(0)
   const wasEligibleForBonfireBenefit = useRef(false)
   const automaticSearchPending = useRef(prefill.shouldSearch)
+  const previousStage = useRef<BookingStage | null>(null)
+  const searchSectionRef = useRef<HTMLElement | null>(null)
+  const availabilityResultsRef = useRef<HTMLElement | null>(null)
+  const personaliseSectionRef = useRef<HTMLElement | null>(null)
+  const detailsSectionRef = useRef<HTMLElement | null>(null)
+  const requestSectionRef = useRef<HTMLElement | null>(null)
   const stageIndex = stages.findIndex(({ id }) => id === stage)
   const canSearch = Boolean(draft.checkIn && draft.checkOut && draft.checkOut > draft.checkIn)
   const selectedProduct = availability?.find((product) => product.productId === draft.selectedProductId)
@@ -281,6 +287,31 @@ export function BookingApp() {
     }
     wasEligibleForBonfireBenefit.current = stage === 'personalise' && hasBonfireMealBenefit
   }, [stage, hasBonfireMealBenefit, bonfireSessions])
+
+  function bringSectionIntoView(ref: { current: HTMLElement | null }, selector?: string) {
+    window.requestAnimationFrame(() => {
+      const section = ref.current
+      if (!section) return
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      const target = selector ? section.querySelector<HTMLElement>(selector) : section
+      target?.focus({ preventScroll: true })
+    })
+  }
+
+  useEffect(() => {
+    if (stage === 'personalise') bringSectionIntoView(personaliseSectionRef, 'h1')
+    if (stage === 'details') bringSectionIntoView(detailsSectionRef, 'h1')
+    if (stage === 'request') bringSectionIntoView(requestSectionRef, 'h1')
+    if (stage === 'search' && previousStage.current && previousStage.current !== 'search') {
+      bringSectionIntoView(searchSectionRef, 'h1')
+    }
+    previousStage.current = stage
+  }, [stage])
+
+  useEffect(() => {
+    if (availability === null || isSearching) return
+    bringSectionIntoView(availabilityResultsRef, 'h2')
+  }, [availability, isSearching])
 
   useEffect(() => {
     if (!legalDocument) return
@@ -416,7 +447,7 @@ export function BookingApp() {
         </ol>
 
         {stage === 'search' && (
-          <section>
+          <section ref={searchSectionRef} className="booking-step" tabIndex={-1} aria-labelledby="booking-title">
             <p className="eyebrow">Private stays in the woods of Raigad</p>
             <h1 id="booking-title">Find your escape</h1>
             <p className="intro">Choose dates and your total party. We’ll show only stays that are genuinely available.</p>
@@ -440,8 +471,8 @@ export function BookingApp() {
             {isSupabaseConfigured && <p className="setup-note">UAT connection is configured locally. Live availability activates after the booking schema and inventory configuration are applied.</p>}
             {searchError && <p className="form-error">{searchError}</p>}
             {displayedAvailability && (
-              <section className="availability-results" aria-live="polite">
-                <h2>{displayedAvailability.length ? 'Available stays' : 'No stays available for those dates'}</h2>
+              <section ref={availabilityResultsRef} className="availability-results" aria-live="polite" aria-labelledby="availability-title">
+                <h2 id="availability-title" tabIndex={-1}>{displayedAvailability.length ? 'Available stays' : 'No stays available for those dates'}</h2>
                 {prefill.preferredStay && displayedAvailability.length > 0 && <p className="setup-note">Your selected villa is shown first when it is available.</p>}
                 {displayedAvailability.length === 0 ? <p>Try other dates, a smaller party, or message the host for a special request.</p> : displayedAvailability.map((product) => (
                   <article className="stay-option" key={product.productId}>
@@ -455,9 +486,9 @@ export function BookingApp() {
         )}
 
         {stage === 'personalise' && selectedProduct && (
-          <section>
+          <section ref={personaliseSectionRef} className="booking-step" tabIndex={-1} aria-labelledby="personalise-title">
             <p className="eyebrow">{stayKindLabel(selectedProduct.sellableKind)}</p>
-            <h1>{selectedProduct.productName}</h1>
+            <h1 id="personalise-title" tabIndex={-1}>{selectedProduct.productName}</h1>
             <p className="intro">Set the adult and child breakdown for this stay. You can adjust your party here; we’ll always keep it within the stay’s capacity. Children aged 0–6 are complimentary but count toward capacity.</p>
             <div className="form-grid">
               <NumericField label="Adults (13+)" min={1} max={maxAdults} value={draft.party.adults} onCommit={(value) => setPartyBreakdown('adults', value)} />
@@ -511,10 +542,10 @@ export function BookingApp() {
           </section>
         )}
         {stage === 'details' && quote && (
-          <section><p className="eyebrow">One last step</p><h1>Your details</h1><p className="intro">Send your reservation request and Breathe Woods will personally confirm availability and share payment details. A request is not a confirmed reservation.</p><div className="form-grid"><label>Full name<input autoComplete="name" value={guestName} onChange={(event) => setGuestName(event.target.value)} required /></label><label>Email<input type="email" autoComplete="email" value={guestEmail} onChange={(event) => setGuestEmail(event.target.value)} required={!guestPhoneDigits} /></label><label className="phone-field">Mobile / WhatsApp number<span className="phone-input"><select aria-label="Country calling code" value={countryCode} onChange={(event) => setCountryCode(event.target.value)}>{countryCodes.map((country) => <option value={country.value} key={country.value}>{country.label} ({country.value})</option>)}<option value="other">Other</option></select>{countryCode === 'other' && <input className="custom-country-code" type="tel" inputMode="tel" aria-label="Country calling code" placeholder="+ code" value={customCountryCode} onChange={(event) => setCustomCountryCode(event.target.value)} />}<input type="tel" inputMode="tel" autoComplete="tel-national" placeholder={countryCode === '+91' ? '10-digit mobile number' : 'Mobile number'} value={guestPhone} onChange={(event) => setGuestPhone(event.target.value)} required={!guestEmail.trim()} /></span><small>Provide either a valid email or mobile number; the other may be left blank. {countryCode === '+91' ? 'Enter 10 digits; +91 is added automatically.' : 'We’ll use this number for stay updates.'}</small></label></div><label className="marketing-consent"><input type="checkbox" checked={marketingOptIn} onChange={(event) => setMarketingOptIn(event.target.checked)} /><span>Yes, I’d like occasional Breathe Woods offers and updates by email and WhatsApp.<small>Optional. Booking and stay updates are sent separately. You can opt out at any time.</small></span></label><p className="policy-link">See our <button type="button" className="inline-link" onClick={() => setLegalDocument('privacy')}>Privacy &amp; Messaging Notice</button> and <button type="button" className="inline-link" onClick={() => setLegalDocument('cancellation')}>Cancellation &amp; Refund Terms</button>.</p><section className="quote-card"><div className="quote-total"><span>Estimated total</span><strong>{formatInrFromPaise(quote.total_paise)}</strong></div><p>By sending this request, you acknowledge the cancellation and refund terms. Availability and payment are confirmed directly by Breathe Woods.</p></section><button className="primary" onClick={submitReservationRequest} disabled={isSubmittingRequest || !hasValidContactDetails}>{isSubmittingRequest ? 'Sending request…' : 'Send reservation request'}</button>{!hasValidContactDetails && guestName.trim().length >= 2 && <p className="setup-note">Enter a valid email address or mobile number. You may provide either one or both.</p>}{requestError && <p className="form-error">{requestError}</p>}<button className="text-button" onClick={() => setStage('personalise')}>Back to price</button></section>
+          <section ref={detailsSectionRef} className="booking-step" tabIndex={-1} aria-labelledby="details-title"><p className="eyebrow">One last step</p><h1 id="details-title" tabIndex={-1}>Your details</h1><p className="intro">Send your reservation request and Breathe Woods will personally confirm availability and share payment details. A request is not a confirmed reservation.</p><div className="form-grid"><label>Full name<input autoComplete="name" value={guestName} onChange={(event) => setGuestName(event.target.value)} required /></label><label>Email<input type="email" autoComplete="email" value={guestEmail} onChange={(event) => setGuestEmail(event.target.value)} required={!guestPhoneDigits} /></label><label className="phone-field">Mobile / WhatsApp number<span className="phone-input"><select aria-label="Country calling code" value={countryCode} onChange={(event) => setCountryCode(event.target.value)}>{countryCodes.map((country) => <option value={country.value} key={country.value}>{country.label} ({country.value})</option>)}<option value="other">Other</option></select>{countryCode === 'other' && <input className="custom-country-code" type="tel" inputMode="tel" aria-label="Country calling code" placeholder="+ code" value={customCountryCode} onChange={(event) => setCustomCountryCode(event.target.value)} />}<input type="tel" inputMode="tel" autoComplete="tel-national" placeholder={countryCode === '+91' ? '10-digit mobile number' : 'Mobile number'} value={guestPhone} onChange={(event) => setGuestPhone(event.target.value)} required={!guestEmail.trim()} /></span><small>Provide either a valid email or mobile number; the other may be left blank. {countryCode === '+91' ? 'Enter 10 digits; +91 is added automatically.' : 'We’ll use this number for stay updates.'}</small></label></div><label className="marketing-consent"><input type="checkbox" checked={marketingOptIn} onChange={(event) => setMarketingOptIn(event.target.checked)} /><span>Yes, I’d like occasional Breathe Woods offers and updates by email and WhatsApp.<small>Optional. Booking and stay updates are sent separately. You can opt out at any time.</small></span></label><p className="policy-link">See our <button type="button" className="inline-link" onClick={() => setLegalDocument('privacy')}>Privacy &amp; Messaging Notice</button> and <button type="button" className="inline-link" onClick={() => setLegalDocument('cancellation')}>Cancellation &amp; Refund Terms</button>.</p><section className="quote-card"><div className="quote-total"><span>Estimated total</span><strong>{formatInrFromPaise(quote.total_paise)}</strong></div><p>By sending this request, you acknowledge the cancellation and refund terms. Availability and payment are confirmed directly by Breathe Woods.</p></section><button className="primary" onClick={submitReservationRequest} disabled={isSubmittingRequest || !hasValidContactDetails}>{isSubmittingRequest ? 'Sending request…' : 'Send reservation request'}</button>{!hasValidContactDetails && guestName.trim().length >= 2 && <p className="setup-note">Enter a valid email address or mobile number. You may provide either one or both.</p>}{requestError && <p className="form-error">{requestError}</p>}<button className="text-button" onClick={() => setStage('personalise')}>Back to price</button></section>
         )}
-        {stage === 'request' && reservationRequest && <section className="empty-state">
-          <p className="eyebrow">Request received</p><h1>Thank you — we’ll be in touch shortly.</h1><p>Your reservation request has been sent to Breathe Woods. We’ll confirm the final availability and share payment details before your stay is confirmed.</p>
+        {stage === 'request' && reservationRequest && <section ref={requestSectionRef} className="empty-state booking-step" tabIndex={-1} aria-labelledby="request-title">
+          <p className="eyebrow">Request received</p><h1 id="request-title" tabIndex={-1}>Thank you — we’ll be in touch shortly.</h1><p>Your reservation request has been sent to Breathe Woods. We’ll confirm the final availability and share payment details before your stay is confirmed.</p>
           <section className="quote-card"><div className="quote-total"><span>Estimated total</span><strong>{formatInrFromPaise(reservationRequest.total_paise)}</strong></div><p>Your Breathe Woods request reference is <strong>{reservationRequest.reference}</strong>.</p></section>
           <a className="whatsapp-button" target="_blank" rel="noreferrer" href={`https://wa.me/919967786444?text=${encodeURIComponent(whatsappMessage)}`}>
             <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 11.5a8 8 0 0 1-11.76 7.05L4 20l1.45-4.04A8 8 0 1 1 20 11.5Z" /><path d="M9.2 8.2c.25-.55.5-.55.72-.55h.36c.13 0 .3.05.38.28l.73 1.72c.08.2.04.4-.08.56l-.45.58c.38.75 1 1.37 1.75 1.75l.58-.45c.16-.12.36-.16.56-.08l1.72.73c.23.08.28.25.28.38v.36c0 .22 0 .47-.55.72-.36.16-.88.25-1.47.04-1.06-.37-2.25-1.18-3.25-2.18-1-1-1.8-2.19-2.18-3.25-.21-.59-.12-1.11.04-1.47Z" /></svg>

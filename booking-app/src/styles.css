@@ -13,6 +13,11 @@ button { cursor: pointer; }
 .header-note, .booking-footer { color: #617168; font-size: .9rem; }
 .return-link { color: #536157; text-decoration: none; }.return-link:hover { color: #173b31; text-decoration: underline; }
 .booking-card { background: #fff; border: 1px solid #e0e4d9; border-radius: 20px; padding: 26px; box-shadow: 0 12px 32px rgba(32, 52, 42, .08); }
+.booking-step, .availability-results { scroll-margin-top: 24px; }
+.booking-step:focus, .availability-results:focus { outline: none; }
+.booking-step h1:focus, .availability-results h2:focus { outline: 2px solid #74a59a; outline-offset: 7px; border-radius: 3px; }
+.booking-step h1, .availability-results h2 { scroll-margin-top: 24px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 .progress { list-style: none; display: flex; padding: 0; margin: 0 0 34px; color: #849087; font-size: .76rem; gap: 8px; overflow-x: auto; }
 .progress li { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
 .progress span { display: grid; place-items: center; height: 22px; width: 22px; border-radius: 50%; background: #e4e8df; color: #536157; }
