@@ -85,6 +85,7 @@ button { cursor: pointer; }
 .intro-section__lead h2 { max-width: 660px; }
 .intro-section__body { max-width: 520px; padding-top: 0; font-size: 15px; line-height: 1.55; }
 .intro-section__body > p { margin: 0; }
+.intro-section__body > .seasonal-note { margin-top: 14px; color: #527167; }
 .stay-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 28px; margin: 25px 0 0; }
 .stay-facts div { display: grid; grid-template-columns: 1fr; gap: 5px; padding: 12px 0; border-top: 1px solid rgba(24,51,44,.17); }
 .stay-facts dt { font: 600 17px/1 var(--sans); }.stay-facts dd { margin: 0; color: #587168; font-size: 13px; }

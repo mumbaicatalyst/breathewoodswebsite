@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <script src="analytics-config.js"></script>
+    <script src="seasonal-content.js" defer></script>
     <script src="analytics.js" defer></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -20,7 +21,7 @@
     <script src="seo.js?v=2" defer></script>
     <link rel="stylesheet" href="stays.css?v=hero-readability-1" /><link rel="stylesheet" href="stays-pets.css" />
   </head>
-  <body>
+  <body data-page="stays">
     <header class="site-header stays-header" id="siteHeader">
       <a class="brand" href="index.html#top" aria-label="Breathe Woods home"><img src="Pics/Brand/desktop-breathe-woods-logo.png" alt="Breathe Woods" /></a>
       <div class="header-actions">
@@ -33,13 +34,13 @@
 
     <main>
       <section class="stays-hero" aria-labelledby="stays-title">
-        <img src="Pics/hero%20images/stay-hero.jpg" alt="A Breathe Woods villa surrounded by the landscape" />
+        <img data-seasonal-page-image="stays-hero" src="Pics/hero%20images/stay-hero.jpg" alt="A Breathe Woods villa surrounded by the landscape" />
         <div class="stays-hero__shade"></div>
-        <div class="stays-hero__copy"><p class="eyebrow">Stays at Breathe Woods</p><h1 id="stays-title">Make yourself at home in the woods.</h1><p>Two villas, five bedrooms, and space for a stay that feels like your own.</p></div>
+        <div class="stays-hero__copy"><p class="eyebrow" data-seasonal-page="stays-hero-eyebrow">Stays at Breathe Woods</p><h1 id="stays-title" data-seasonal-page="stays-hero-title">Make yourself at home in the woods.</h1><p data-seasonal-page="stays-hero-body">Two villas, five bedrooms, and space for a stay that feels like your own.</p></div>
       </section>
 
       <section class="stay-choice" aria-labelledby="stay-choice-title">
-        <div class="stay-choice__heading"><p class="eyebrow dark">Choose how you stay</p><h2 id="stay-choice-title">A room for two, or the whole place for your people.</h2></div>
+        <div class="stay-choice__heading"><p class="eyebrow dark">Choose how you stay</p><h2 id="stay-choice-title">A room for two, or the whole place for your people.</h2><p data-seasonal-page="stays-intro"></p></div>
         <div class="stay-choice__cards">
           <article class="stay-choice__card"><img src="Pics/BougainVilla/couple-stay.jpeg" alt="A Breathe Woods room for a couple stay" /><div><p class="eyebrow dark">Sunday–Thursday</p><h3>Weekday room stays</h3><p>Individual rooms for solo travellers and couples, subject to availability. Staying longer? Couples may be able to include a weekend.</p><small class="stay-choice__rate">From ₹4,000 solo · ₹5,500 for two</small></div></article>
           <article class="stay-choice__card"><img src="Pics/BougainVilla/hero-villa.jpg" alt="Bougan'Villa at Breathe Woods" /><div><p class="eyebrow dark">Families & groups</p><h3>Private villa stays</h3><p>Make either villa your own. Friday and Saturday stays are primarily offered this way.</p></div></article>
