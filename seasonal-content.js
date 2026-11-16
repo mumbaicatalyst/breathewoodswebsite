@@ -8,7 +8,7 @@
       label: 'Winter at Breathe Woods',
       hero: [
         { eyebrow: 'Winter at Breathe Woods', title: 'A slower stay shaped by water and woods.', detail: 'Six and a half acres. Two private villas.', image: 'Pics/seasonal/winter/aerial-winter.png', mobileImage: 'Pics/seasonal/winter-mobile/aerial-winter.png', alt: 'Aerial winter view of Breathe Woods, surrounded by water and forest' },
-        { eyebrow: 'Cooler evenings', title: 'Stay out a little longer.', detail: 'Bonfire and barbecue arrangements available on request.', image: 'Pics/optimized/home/home-page-nature-pause.jpg', mobileImage: 'Pics/optimized/home-mobile/home-page-nature-pause.jpg', alt: 'A quiet green path at Breathe Woods' },
+        { eyebrow: 'Cooler evenings', title: 'Gather around the fire.', detail: 'Bonfire and barbecue by advance arrangement, when weather allows.', image: 'Pics/seasonal/winter/bonfire-winter-group-grass.png', mobileImage: 'Pics/seasonal/winter/bonfire-winter-group-grass.png', alt: 'Guests in light winter layers gathered around a bonfire at Breathe Woods' },
         { eyebrow: 'Unhurried mornings', title: 'Let the day begin slowly.', detail: 'Breakfast, a walk and nowhere else you need to be.', image: 'Pics/seasonal/winter/morning-winter.png', mobileImage: 'Pics/seasonal/winter-mobile/morning-winter.png', alt: 'Clear winter morning light over the Breathe Woods garden' },
         { eyebrow: 'Two private villas', title: 'Your place in the woods.', detail: 'Space to settle in with the people—and pets—you brought along.', image: 'Pics/seasonal/winter/villa-winter.png', mobileImage: 'Pics/seasonal/winter-mobile/villa-winter.png', alt: 'A Breathe Woods villa in clear winter light' },
         { eyebrow: 'Time together', title: 'Make the evenings count.', detail: 'Good food, warm drinks and a few days without a fixed agenda.', image: 'Pics/optimized/home/hero-relax-people.jpg', mobileImage: 'Pics/optimized/home-mobile/hero-relax-people.jpg', alt: 'Two guests sitting with warm drinks on a Breathe Woods porch' }
@@ -55,8 +55,11 @@
           'explore-hero-title': 'Make the evening part of the stay.',
           'explore-hero-body': 'Take a walk while the light is soft, share time by the water or arrange a bonfire and barbecue for later.',
           'explore-fire-title': 'Firelight, then dinner.',
-          'explore-fire-body': 'Bonfire and barbecue are paid add-ons, available by advance arrangement and when the weather allows—an easy way to make a cooler evening feel special.',
-          images: { 'explore-hero': { image: 'Pics/Explore/Friends_gathering_around_bonfire.jpg', alt: 'Friends gathered around a bonfire at Breathe Woods' } }
+          'explore-fire-body': 'As the evening cools, gather outdoors for a bonfire and barbecue. Both are paid add-ons and need to be arranged in advance; availability depends on the weather.',
+          images: {
+            'explore-hero': { image: 'Pics/Explore/Friends_gathering_around_bonfire.jpg', alt: 'Friends gathered around a bonfire at Breathe Woods' },
+            'explore-bonfire': { image: 'Pics/seasonal/winter/bonfire-winter-group-grass.png', alt: 'A group of guests in light sweaters and jackets gathered around a bonfire on a cool evening' }
+          }
         },
         information: {
           'information-hero-eyebrow': 'Planning a winter stay',
@@ -64,7 +67,7 @@
           'information-hero-body': 'Here is the practical part: arrival, meals, cooler evenings and a rough sense of the journey. Once you are here, the plan can loosen.',
           'information-season-title': 'Winter has its own reason.',
           'information-season-body': 'Winter brings comfortable days, cooler evenings, open space and time for walks, lake views, good food and a bonfire or barbecue arranged in advance.',
-          'information-weather-title': 'Cooler days, warmer evenings.',
+          'information-weather-title': 'Comfortable days, cooler evenings.',
           'information-weather-body': 'Bring a light layer for after sunset. Bonfire, barbecue and lake outings are available by arrangement and remain subject to local conditions and on-ground guidance.',
           'information-packing-title': 'Pack for cooler evenings.',
           'information-packing-body': 'Comfortable shoes and a light layer will take you far. Bring anything your pet needs, and leave room for slow mornings and time outdoors.'
