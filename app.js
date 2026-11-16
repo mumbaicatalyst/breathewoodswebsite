@@ -7,7 +7,7 @@ const menuDialog = document.querySelector('#menuDialog');
 const frames = [...document.querySelectorAll('.hero-frame')];
 let activeHeroIndex = 0;
 let carouselTimer = null;
-const carouselInterval = 7000;
+const carouselInterval = 5000;
 
 function setActiveHero(index) {
   activeHeroIndex = index;
